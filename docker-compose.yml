@@ -3,22 +3,21 @@ version: "3.8"
 services: 
   mysqldb:
     image: mysql:8.0
-    container_name: mysql-container
-    networks:
-      - yelp-ea
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - biblio-mysql-data:/var/lib/mysql
     environment: 
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: yelp-ea
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     image: yelp-ea-api
-    container_name: backend-container
-    networks:
-      - yelp-ea
     ports:
       - "8080:8080"
     environment:
@@ -30,16 +29,10 @@ services:
 
   frontend:
     image: yelp-ea-front
-    container_name: frontend-container
-    networks:
-      - yelp-ea
     depends_on:
       - backend
     ports:
       - "4200:80"
-
-networks:
-  yelp-ea:
 
 volumes:
   biblio-mysql-data:
