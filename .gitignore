@@ -71,3 +71,6 @@
 # System files
 /yelp-ea/.DS_Store
 /yelp-ea/Thumbs.db
+
+##Docker
+docker-compose.yml
