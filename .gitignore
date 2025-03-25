@@ -1,0 +1,73 @@
+/yelp-ea-api/HELP.md
+/yelp-ea-api/target/
+/yelp-ea-api/!.mvn/wrapper/maven-wrapper.jar
+/yelp-ea-api/!**/src/main/**/target/
+/yelp-ea-api/!**/src/test/**/target/
+
+### STS ###
+/yelp-ea-api/.apt_generated
+/yelp-ea-api/.classpath
+/yelp-ea-api/.factorypath
+/yelp-ea-api/.project
+/yelp-ea-api/.settings
+/yelp-ea-api/.springBeans
+/yelp-ea-api/.sts4-cache
+
+### IntelliJ IDEA ###
+/yelp-ea-api/.idea
+/yelp-ea-api/*.iws
+/yelp-ea-api/*.iml
+/yelp-ea-api/*.ipr
+
+### NetBeans ###
+/yelp-ea-api/nbproject/private/
+/yelp-ea-api/nbbuild/
+/yelp-ea-api/dist/
+/yelp-ea-api/nbdist/
+/yelp-ea-api/.nb-gradle/
+/yelp-ea-api/build/
+/yelp-ea-api/!**/src/main/**/build/
+/yelp-ea-api/!**/src/test/**/build/
+
+### VS Code ###
+/yelp-ea-api/.vscode/
+
+###Front
+# Compiled output
+/yelp-ea/dist
+/yelp-ea/tmp
+/yelp-ea/out-tsc
+/yelp-ea/bazel-out
+
+# Node
+/yelp-ea/node_modules
+/yelp-ea/npm-debug.log
+/yelp-ea/yarn-error.log
+/yelp-ea/.idea/
+/yelp-ea/.project
+/yelp-ea/.classpath
+/yelp-ea/.c9/
+/yelp-ea/*.launch
+/yelp-ea/.settings/
+/yelp-ea/*.sublime-workspace
+
+# Visual Studio Code
+/yelp-ea/.vscode/*
+/yelp-ea/!.vscode/settings.json
+/yelp-ea/!.vscode/tasks.json
+/yelp-ea/!.vscode/launch.json
+/yelp-ea/!.vscode/extensions.json
+/yelp-ea/.history/*
+
+# Miscellaneous
+/yelp-ea/.angular/cache
+/yelp-ea/.sass-cache/
+/yelp-ea/connect.lock
+/yelp-ea/coverage
+/yelp-ea/libpeerconnection.log
+/yelp-ea/testem.log
+/yelp-ea/typings
+
+# System files
+/yelp-ea/.DS_Store
+/yelp-ea/Thumbs.db
