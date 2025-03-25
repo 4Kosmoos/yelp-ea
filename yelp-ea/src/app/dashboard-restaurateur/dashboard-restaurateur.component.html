@@ -1,0 +1,37 @@
+<div *ngIf="restaurants.length > 0" class="restaurant-list mt-4">
+    <h3>Liste de mes restaurants</h3>
+
+    <!-- Table responsive -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Adresse</th>
+                    <th>Description</th>
+                    <th>Catégorie</th>
+                    <th>Coordonnées</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let restaurant of restaurants">
+                    <td>{{ restaurant.nom }}</td>
+                    <td>{{ restaurant.adresse }}</td>
+                    <td>{{ restaurant.description }}</td>
+                    <td>{{ restaurant.categorie }}</td>
+                    <td>{{ restaurant.coordonnees }}</td>
+                    <td>
+                        <!-- Boutons d'action (modifier, supprimer) -->
+                        <button class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil"></i> Modifier
+                        </button>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Supprimer
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

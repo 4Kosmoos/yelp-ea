@@ -1,0 +1,142 @@
+/* Styles généraux pour la liste des restaurants */
+.restaurant-list h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Style général pour les cartes de restaurant */
+.table-responsive {
+    margin-top: 2rem;
+}
+
+.table {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border: 0;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.table thead {
+    background: linear-gradient(90deg, #00bcd4, #009688);
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f7f7f7;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+.table-striped tbody tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s;
+}
+
+.table td {
+    font-size: 1rem;
+    color: #333;
+}
+
+.table th {
+    font-size: 1.1rem;
+}
+
+/* Boutons d'action modernisés */
+.btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+}
+
+.btn-warning {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-warning:hover {
+    background-color: #fb8c00;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+}
+
+/* Ajouter des icônes modernes et bien espacées */
+.bi {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+/* Effet de survol des cartes */
+.table tbody tr:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Table Responsive */
+.table-responsive {
+    margin: 2rem 0;
+    overflow-x: auto;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajout d'un fond dégradé subtil à la page */
+body {
+    background: linear-gradient(135deg, #f0f2f5, #e6f7ff);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.restaurant-list {
+    margin-top: 3rem;
+}
+
+/* Pour les petits écrans, ajustement de la table */
+@media (max-width: 767px) {
+    .table-responsive {
+        margin-top: 1rem;
+    }
+
+    .table td, .table th {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}

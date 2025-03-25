@@ -1,0 +1,33 @@
+.app-header {
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 2px -2px gray;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  .nav-items {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-items button {
+    font-size: 1em;
+    padding: 8px 15px;
+    border-radius: 5px;
+  }
+  
+  .nav-items button:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  

@@ -1,0 +1,21 @@
+<header class="app-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- Menu pour restaurateur -->
+      <div *ngIf="userRole === 'restaurateur'" class="nav-items">
+        <button class="btn btn-primary" (click)="viewRestaurants()">Voir mes restaurants</button>
+        <button class="btn btn-success" (click)="addRestaurant()">Ajouter un restaurant</button>
+      </div>
+
+      <!-- Menu pour utilisateur classique -->
+      <div *ngIf="userRole === 'utilisateur'" class="nav-items">
+        <button class="btn btn-info" (click)="viewAllRestaurants()">Voir tous les restaurants</button>
+        <button class="btn btn-secondary" (click)="otherPage()">Autre page</button>
+      </div>
+
+      <!-- Menu pour admin -->
+      <div *ngIf="userRole === 'admin'" class="nav-items">
+        <button class="btn btn-warning" (click)="viewUsers()">Voir les utilisateurs</button>
+        <button class="btn btn-danger" (click)="viewRestaurateurs()">Voir les restaurateurs</button>
+      </div>
+    </nav>
+  </header>
