@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /src/app
 COPY . ./
 RUN npm install -g @angular/cli
 RUN npm install
