@@ -7,5 +7,4 @@ import java.util.List;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
-    //List<Restaurant> findAll();
 }

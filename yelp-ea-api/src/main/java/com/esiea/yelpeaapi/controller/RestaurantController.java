@@ -23,8 +23,14 @@ public class RestaurantController {
     }
 
     @GetMapping("/all")
-    public List<Restaurant> getAllRestaurants() {
-        return service.getAll();
+    public ResponseEntity<?> getAllRestaurants() {
+        try {
+            System.out.println("⚡ Récupération de tous les restaurants...");
+            return ResponseEntity.ok(service.getAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Erreur : " + e.getMessage());
+        }
     }
 
 
