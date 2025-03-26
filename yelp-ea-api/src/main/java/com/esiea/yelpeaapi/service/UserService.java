@@ -42,6 +42,10 @@ public class UserService {
 
     // Supprimer un utilisateur
     public void delete(int id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + id);
+        }
         userRepository.deleteById(id);
     }
+
 }
