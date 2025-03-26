@@ -23,7 +23,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/all")
-    public List<Restaurant> getMethodName() {
+    public List<Restaurant> getAllRestaurants() {
         return service.getAll();
     }
 
