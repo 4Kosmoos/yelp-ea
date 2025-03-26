@@ -23,13 +23,15 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public String sayHello() {
-        return "Hello all!";
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            System.out.println("⚡ Récupération de tous les utilisateurs...");
+            return ResponseEntity.ok(service.getAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Erreur : " + e.getMessage());
+        }
     }
-
-//    public List<User> getAllUsers() {
-//        return service.getAll();
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {

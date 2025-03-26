@@ -16,7 +16,6 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        System.out.println("⚡ Récupération de tous les utilisateurs...");
         return userRepository.findAll();
     }
 
