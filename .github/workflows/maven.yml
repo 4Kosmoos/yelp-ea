@@ -19,7 +19,7 @@ jobs:
         uses: docker-practice/actions-setup-docker@master
 
       # Installer Docker Compose via CLI
-      - name: compose in cli
+      - name: Compose in CLI
         run: |
         DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
         mkdir -p $DOCKER_CONFIG/cli-plugins
@@ -28,6 +28,7 @@ jobs:
 
       - name: Ex cli
         run: pwd
+  test:
 
       # Test Unitaire
       - name: Run unit tests
@@ -36,8 +37,10 @@ jobs:
       # Test d'intégration
       - name: Run integration tests
 
+
       # Test fonctionnel
       - name: Run functional tests 
+
 
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
@@ -46,6 +49,10 @@ jobs:
   cd:
     runs-on: ubuntu-latest
     steps:
+      # Installer Docker
+      - name: Install Docker
+        run: sudo apt-get install -y docker.io
+
       # Se connecter à Docker
       - name: Docker login
         run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
