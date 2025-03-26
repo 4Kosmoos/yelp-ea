@@ -34,11 +34,11 @@ jobs:
         run: mvn test
 
       # Test d'intégration
-      - name: Run integration tests
+      #- name: Run integration tests
 
 
       # Test fonctionnel
-      - name: Run functional tests 
+      #- name: Run functional tests 
 
 
       # Teardown : arrêter les services Docker
