@@ -1,6 +1,8 @@
 package com.esiea.yelpeaapi.entity;
 
 import com.esiea.yelpeaapi.UserRole;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +11,7 @@ public class User {
     private String login;
     private String password;
     private UserRole role;
-    private Map<Integer, Note> notes;
+    private Map<Integer, Integer> notes;
     private List<Integer> resto;
 
     public int getId() {
@@ -44,12 +46,12 @@ public class User {
         this.role = role;
     }
 
-    public Map<Integer, Note> getNotes() {
+    public Map<Integer, Integer> getNotes() {
         return notes;
     }
 
-    public void setNotes(Map<Integer, Note> notes) {
-        if (role == UserRole.USER) {
+    public void setNotes(Map<Integer, Integer> notes) {
+        if (role == UserRole.customer) {
             this.notes = notes;
         } else {
             this.notes = null;
@@ -61,7 +63,7 @@ public class User {
     }
 
     public void setResto(List<Integer> resto) {
-        if (role == UserRole.RESTAURATEUR) {
+        if (role == UserRole.owner) {
             this.resto = resto;
         } else {
             this.resto = null;
@@ -71,12 +73,12 @@ public class User {
     public User() {
     }
 
-    public User(int id, String login, String password, UserRole role, Map<Integer, Note> notes, List<Integer> resto) {
+    public User(int id, String login, String password, UserRole role, Map<Integer, Integer> notes, List<Integer> resto) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.role = role;
-        this.notes = (role == UserRole.USER) ? notes : null;
-        this.resto = (role == UserRole.RESTAURATEUR) ? resto : null;
+        this.notes = (role == UserRole.customer) ? notes : null;
+        this.resto = (role == UserRole.owner) ? resto : null;
     }
 }
