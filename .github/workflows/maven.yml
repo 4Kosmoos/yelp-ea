@@ -65,6 +65,11 @@ jobs:
       - name: Teardown (docker-compose down)
         run: docker-compose down
 
+      - name: Log secret check
+        run: |
+          echo "Username: ${{ secrets.SPRING_DATASOURCE_USERNAME }}"
+          echo "Password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}"
+
       # Se connecter à Docker
       - name: Docker login
         run: echo ${{ secrets.SPRING_DATASOURCE_PASSWORD }} | docker login --username ${{ secrets.SPRING_DATASOURCE_USERNAME }} --password-stdin
