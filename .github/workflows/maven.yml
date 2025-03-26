@@ -33,21 +33,10 @@ jobs:
       - name: Run unit tests
         run: mvn test
 
-      # Test d'intégration
-      - name: Run integration tests
-
-
-      # Test fonctionnel
-      - name: Run functional tests 
-
-
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
         run: docker-compose down
 
-  cd:
-    runs-on: ubuntu-latest
-    steps:
       # Installer Docker
       - name: Install Docker
         run: sudo apt-get install -y docker.io
@@ -63,3 +52,4 @@ jobs:
       # Pousser l'image Docker vers le registre
       - name: Docker push
         run: docker push my-app
+        
