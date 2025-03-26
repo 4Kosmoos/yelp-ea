@@ -60,3 +60,4 @@ jobs:
       # Pousser l'image Docker vers le registre
       - name: Docker push
         run: docker push my-app
+        
