@@ -10,6 +10,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
+      # Étape de Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -17,38 +18,34 @@ jobs:
       - name: Docker install avec action
         uses: docker-practice/actions-setup-docker@master
 
-      # Vérifier la version de Docker
-      - name: Check Docker version
-        run: docker --version
-
-      # Vérifier le statut de Docker
-      - name: Check Docker status
-        run: sudo systemctl status docker
-
-      # Créer un fichier de configuration daemon.json si nécessaire
-      - name: Create daemon.json
-        run: |
-          if [ ! -f /etc/docker/daemon.json ]; then
-            echo '{"storage-driver": "overlay2"}' | sudo tee /etc/docker/daemon.json
-            sudo systemctl restart docker
-          fi
-
       # Installer Docker Compose via CLI
-      - name: Compose in CLI
+      - name: compose in cli
         run: |
-          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-          mkdir -p $DOCKER_CONFIG/cli-plugins
-          curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+        DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+      - name: Ex cli
+        run: pwd
 
       # Test Unitaire
       - name: Run unit tests
         run: mvn test
 
+      # Test d'intégration
+      - name: Run integration tests
+
+      # Test fonctionnel
+      - name: Run functional tests 
+
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
         run: docker-compose down
 
+  cd:
+    runs-on: ubuntu-latest
+    steps:
       # Se connecter à Docker
       - name: Docker login
         run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
