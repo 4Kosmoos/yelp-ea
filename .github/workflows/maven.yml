@@ -49,12 +49,18 @@ jobs:
          
 
 
+      # Installer Java 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
       # Test Unitaire
       - name: Run unit tests
         run: |
           cd yelp-ea-api
           mvn test
-
 
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
