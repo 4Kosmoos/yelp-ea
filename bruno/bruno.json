@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "YelpEa",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
