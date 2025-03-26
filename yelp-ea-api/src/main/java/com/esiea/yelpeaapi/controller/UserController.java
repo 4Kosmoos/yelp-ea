@@ -23,9 +23,13 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return service.getAll();
+    public String sayHello() {
+        return "Hello all!";
     }
+
+//    public List<User> getAllUsers() {
+//        return service.getAll();
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {

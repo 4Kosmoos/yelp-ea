@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -19,8 +18,10 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAll(); // Vérifie qu'il y a bien des données en BDD
+        System.out.println("⚡ Récupération de tous les utilisateurs...");
+        return userRepository.findAll();
     }
+
 
     public User get(int id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
