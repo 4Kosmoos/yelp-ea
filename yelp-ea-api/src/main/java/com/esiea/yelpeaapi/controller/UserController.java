@@ -23,14 +23,14 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getMethodName() {
+    public List<User> getAllUsers() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getMethodName(@PathVariable int id) {
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(service.get(id));
     }
 
-    }
+}
 
