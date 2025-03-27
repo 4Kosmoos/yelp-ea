@@ -44,9 +44,9 @@ jobs:
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
 
       # Vérifier l'installation de Docker Compose
-      - name: Verify Docker Compose installation
-        run: |
-          docker-compose --version
+      #- name: Verify Docker Compose installation
+      #  run: |
+      #    docker-compose --version
 
       # Installer Java 21
       - name: Set up JDK 21
@@ -59,7 +59,7 @@ jobs:
       - name: Run unit tests
         run: |
           cd yelp-ea-api
-          mvn test
+          mvn package
 
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
