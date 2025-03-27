@@ -18,4 +18,13 @@ export class UserService{
   getUserById(id: number): Observable<User> {
     return this.httpClient.get<User>(`${this.API_URL}/${id}`);
   }
+
+  addRating(userId: number, restaurantId: number, rating: number): Observable<User> {
+    const url = `${this.API_URL}/${userId}/rate/${restaurantId}?rating=${rating}`;
+
+    // Si le backend attend un corps (body) avec ces informations, tu peux l'envoyer comme suit
+    const body = { rating };
+
+    return this.httpClient.post<User>(url, body);  // Envoi de rating dans le corps de la requête
+  }
 }

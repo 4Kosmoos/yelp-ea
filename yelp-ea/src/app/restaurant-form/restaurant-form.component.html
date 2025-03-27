@@ -10,14 +10,16 @@
     <label for="description">Description :</label>
     <textarea id="description" [(ngModel)]="newRestaurant.description" name="description" required placeholder="Décrivez votre restaurant"></textarea>
 
-    <label for="categorie">Catégorie :</label>
-    <select id="categorie" [(ngModel)]="newRestaurant.category" name="category">
-      <option>Autre</option>
-      <option>Fast Food</option>
-      <option>Italien</option>
-      <option>Japonais</option>
-      <option>Indien</option>
-    </select>
+    <label for="phone">Téléphone :</label>
+    <input type="text" id="phone" [(ngModel)]="newRestaurant.phone" name="phone" required placeholder="Téléphone du restaurant">
+
+    <label>Catégories :</label>
+    <div *ngFor="let category of categories">
+      <label>
+        <input type="checkbox" [(ngModel)]="category.selected" [value]="category.name" name="categories" (change)="onCategoryChange(category)">
+        {{ category.name }}
+      </label>
+    </div>
 
     <button type="submit" class="submit-btn">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
   </form>

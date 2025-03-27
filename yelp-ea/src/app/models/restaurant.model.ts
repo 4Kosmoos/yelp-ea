@@ -9,24 +9,23 @@ export interface Restaurant {
   }
 
 export enum RestaurantCategories {
-  Chinois,
-  libanais,
-  Thai,
-  Vegan,
-  Grec,
-  Kebab,
-  Fast_food,
-  japonais,
-  italien,
+  Chinois = 'Chinois',
+  Libanais = 'Libanais',
+  Thai = 'Thai',
+  Vegan = 'Vegan',
+  Grec = 'Grec',
+  Kebab = 'Kebab',
+  Fast_food = 'Fast food',
+  Japonais = 'Japonais',
+  Italien = 'Italien'
 }
-
 
 export interface User {
   id: number;
   login: string;
   password: string;
   userRole: UserRole;
-  notes: Map<number, number>;
+  notes: Map<number, number>;  // Remarquer que c'est une map clé-valeur
   resto: Restaurant[];
 }
 
