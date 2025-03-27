@@ -19,6 +19,10 @@ export class UserService{
     return this.httpClient.get<User>(`${this.API_URL}/${id}`);
   }
 
+  deleteUser(id: number): Observable<string> {
+    return this.httpClient.delete(`${this.API_URL}/delete/${id}`, { responseType: 'text' });
+  }
+
   addRating(userId: number, restaurantId: number, rating: number): Observable<User> {
     const url = `${this.API_URL}/${userId}/rate/${restaurantId}?rating=${rating}`;
 

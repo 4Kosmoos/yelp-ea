@@ -54,10 +54,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   viewUsers() {
     console.log('Affichage des utilisateurs');
+    this.router.navigate(['/allUser']);
   }
 
   viewRestaurateurs() {
     console.log('Affichage des restaurateurs');
+    this.router.navigate(['/dashboard-restaurateur']);
   }
 
   // Méthode pour gérer la déconnexion

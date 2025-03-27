@@ -31,8 +31,8 @@ export class RestaurantService {
     return this.httpClient.put(`${this.API_URL}/${id}`, updatedRestaurant);
   }
   //Supprimer un restaurant
-  deleteRestaurant(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.API_URL}/${id}`);
+  deleteRestaurant(id: number): Observable<String> {
+    return this.httpClient.delete(`${this.API_URL}/${id}`, { responseType: 'text' });
   }
 
   rateRestaurant(id: number, rating: number) {

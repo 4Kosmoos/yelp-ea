@@ -33,7 +33,7 @@ export class LoginComponent {
               this.router.navigate(['/dashboard-restaurateur']);
               break;
             case UserRole.admin:
-              this.router.navigate(['/admin']);
+              this.router.navigate(['/allUser']);
               break;
             default:
               this.errorMessage = 'Rôle inconnu';
