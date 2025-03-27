@@ -73,10 +73,10 @@ jobs:
       #    password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           
       # Construire l'image Docker
-      - name: Docker build
-        run: |
-          cd yelp-ea-api
-          docker build -t my-app .
+      #- name: Docker build
+      #  run: |
+      #    cd yelp-ea-api
+      #    docker build -t my-app .
 
       # Pousser l'image Docker vers le registre
       - name: Docker push
