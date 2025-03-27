@@ -1,19 +1,19 @@
 meta {
-  name: Add
+  name: UpdateOne
   type: http
-  seq: 2
+  seq: 5
 }
 
-post {
-  url: http://localhost:8080/restaurants
+put {
+  url: http://localhost:8080/restaurants/8
   body: json
   auth: none
 }
 
 body:json {
   {
-    "name": "oui",
-    "phone": "oui",
+    "name": "non",
+    "phone": "non",
     "address": "oui",
     "description": "oui",
     "rating":null
