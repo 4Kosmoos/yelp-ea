@@ -23,7 +23,6 @@ public class RestaurantController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllRestaurants() {
         try {
-            System.out.println("⚡ Récupération de tous les restaurants...");
             return ResponseEntity.ok(service.getAll());
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +33,6 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> getMethodName(@PathVariable int id) {
         try{
-            System.out.println("⚡ Récupération du restaurant avec l'ID : " + id);
             return ResponseEntity.ok(service.get(id));
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,7 +43,6 @@ public class RestaurantController {
     @PostMapping
     public ResponseEntity<?> createRestaurant(@RequestBody Restaurant restaurant) {
         try {
-            System.out.println("⚡ Ajout d'un nouvel utilisateur...");
             return ResponseEntity.ok(service.add(restaurant));
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +55,6 @@ public class RestaurantController {
             @PathVariable int id,
             @RequestBody Restaurant updatedRestaurant) {
         try {
-            System.out.println("⚡ Mise à jour du restaurant avec l'ID : " + id);
             return ResponseEntity.ok(service.update(id, updatedRestaurant));
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +64,6 @@ public class RestaurantController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRestaurant(@PathVariable int id) {
         try{
-            System.out.println("⚡ Suppression du restaurant avec l'ID : " + id);
             service.delete(id);
             return ResponseEntity.ok("restaurant supprimé avec succès !");
         } catch (Exception e) {
