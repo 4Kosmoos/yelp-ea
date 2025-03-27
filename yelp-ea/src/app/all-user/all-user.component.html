@@ -1,0 +1,34 @@
+<h2>Liste des utilisateurs</h2>
+
+<!-- Affichage du chargement -->
+<div *ngIf="isLoading">Chargement des utilisateurs...</div>
+
+<!-- Affichage des erreurs -->
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+<!-- Liste des utilisateurs -->
+<table *ngIf="!isLoading && users.length > 0">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Email</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <td>{{ user.id }}</td>
+    <td>{{ user.login }}</td>
+    <td>{{ user.userRole }}</td>
+    <td>
+      <button (click)="deleteUser(user.id)" class="delete-btn">🗑 Supprimer</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Message si aucun utilisateur trouvé -->
+<div *ngIf="!isLoading && users.length === 0">
+  Aucun utilisateur trouvé.
+</div>
