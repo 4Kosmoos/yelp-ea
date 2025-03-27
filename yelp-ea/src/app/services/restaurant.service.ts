@@ -32,7 +32,7 @@ export class RestaurantService {
   }
   //Supprimer un restaurant
   deleteRestaurant(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.API_URL}/delete/${id}`);
+    return this.httpClient.delete<void>(`${this.API_URL}/${id}`);
   }
 
   rateRestaurant(id: number, rating: number) {

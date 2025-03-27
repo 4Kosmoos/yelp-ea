@@ -45,10 +45,10 @@
         <td>{{ restaurant.rating }}</td>
         <td>
           <!-- Boutons d'action (modifier, supprimer) -->
-          <button class="btn btn-warning btn-sm">
+          <button class="btn btn-warning btn-sm" >
             <i class="bi bi-pencil"></i> Modifier
           </button>
-          <button class="btn btn-danger btn-sm">
+          <button class="btn btn-danger btn-sm" (click)="deleteRestaurant(restaurant.id)">
             <i class="bi bi-trash"></i> Supprimer
           </button>
         </td>

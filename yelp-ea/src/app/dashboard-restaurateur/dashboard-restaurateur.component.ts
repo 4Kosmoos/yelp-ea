@@ -20,6 +20,10 @@ export class DashboardRestaurateurComponent implements OnInit {
   constructor(private restaurantService: RestaurantService, private router: Router) {}
 
   ngOnInit(): void {
+    this.loadRestaurants();
+  }
+
+  loadRestaurants(): void {
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
         this.restaurants = data;
@@ -32,14 +36,27 @@ export class DashboardRestaurateurComponent implements OnInit {
     });
   }
 
-  addRestaurant() {
+  addRestaurant(): void {
     console.log('Ajout d’un restaurant');
-    // Logique pour ajouter un restaurant, rediriger vers un formulaire, etc.
-    this.router.navigate(['/ajout']); // Exemple de redirection vers la page d'ajout
+    this.router.navigate(['/ajout']); // Redirection vers la page d'ajout
   }
 
+  // Méthode pour supprimer un restaurant
+  deleteRestaurant(restaurantId: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce restaurant ?')) {
+      this.restaurantService.deleteRestaurant(restaurantId).subscribe({
+        next: () => {
+          this.restaurants = this.restaurants.filter(restaurant => restaurant.id !== restaurantId);
+          console.log('Restaurant supprimé avec succès');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression du restaurant', err);
+        }
+      });
+    }
+  }
 
-  toggleForm() {
+  toggleForm(): void {
     this.showForm = !this.showForm;
   }
 }
