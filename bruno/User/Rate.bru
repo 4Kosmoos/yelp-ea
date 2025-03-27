@@ -1,0 +1,23 @@
+meta {
+  name: Rate
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/users/3/rate/3?rating=5
+  body: json
+  auth: inherit
+}
+
+params:query {
+  rating: 5
+}
+
+body:json {
+  {
+    "login":"finaltestCustomer",
+    "password":"finaltestCustomer",
+    "role":"admin"
+  }
+}
