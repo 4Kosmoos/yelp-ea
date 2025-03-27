@@ -5,7 +5,24 @@ meta {
 }
 
 put {
+<<<<<<< HEAD
   url: http://localhost:8080/users/update/{id}
   body: none
   auth: inherit
+=======
+  url: http://localhost:8080/users/update/2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "login":"ad",
+    "password":"ad"
+  }
+}
+
+body:form-urlencoded {
+  : 
+>>>>>>> daa5b2e0d6f42ab1a28c1145988be1ddbe7a94b4
 }

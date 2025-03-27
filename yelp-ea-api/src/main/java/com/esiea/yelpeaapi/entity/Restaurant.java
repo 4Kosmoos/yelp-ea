@@ -25,8 +25,8 @@ public class Restaurant {
     @Enumerated(EnumType.STRING)
     private List<RestaurantCategories> categories;
 
-    @Column(nullable = true)
-    private float rating;
+    @Transient
+    private double rating;
 
     public int getId() {
         return id;
@@ -76,11 +76,11 @@ public class Restaurant {
         this.categories = categories;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

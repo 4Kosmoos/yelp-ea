@@ -3,7 +3,6 @@ package com.esiea.yelpeaapi.entity;
 import com.esiea.yelpeaapi.UserRole;
 import jakarta.persistence.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

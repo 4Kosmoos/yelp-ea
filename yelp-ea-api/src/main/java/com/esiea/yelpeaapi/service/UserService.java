@@ -30,9 +30,12 @@ public class UserService {
 
     public User update(int id, User updatedUser) {
         User existingUser = get(id);
-        existingUser.setLogin(updatedUser.getLogin());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setRole(updatedUser.getRole());
+        if (updatedUser.getLogin() != null) {
+            existingUser.setLogin(updatedUser.getLogin());
+        }
+        if (updatedUser.getPassword() != null) {
+            existingUser.setPassword(updatedUser.getPassword());
+        }
         return userRepository.save(existingUser);
     }
 
