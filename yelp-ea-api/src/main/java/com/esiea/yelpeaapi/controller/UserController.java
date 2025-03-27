@@ -74,5 +74,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{userId}/rate/{restaurantId}")
+    public ResponseEntity<User> rateRestaurant(
+            @PathVariable int userId,
+            @PathVariable int restaurantId,
+            @RequestParam int rating) {
+        try {
+            User updatedUser = service.addRating(userId, restaurantId, rating);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }
 

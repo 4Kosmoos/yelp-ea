@@ -1,0 +1,20 @@
+meta {
+  name: Add
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/restaurants
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "testRate",
+    "phone": "testRate",
+    "address": "testRate",
+    "description": "testRate"
+  }
+}

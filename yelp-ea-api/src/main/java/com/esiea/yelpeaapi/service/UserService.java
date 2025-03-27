@@ -1,10 +1,13 @@
 package com.esiea.yelpeaapi.service;
 
+import com.esiea.yelpeaapi.UserRole;
 import com.esiea.yelpeaapi.entity.User;
 import com.esiea.yelpeaapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -46,4 +49,17 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public User addRating(int userId, int restaurantId, int rating) {
+        User user = get(userId);
+        if (user.getRole() != UserRole.customer) {
+            throw new RuntimeException("Seul un utilisateur de type CUSTOMER peut attribuer une note.");
+        }
+        Map<Integer, Integer> notes = user.getNotes();
+        if (notes == null) {
+            notes = new HashMap<>();
+        }
+        notes.put(restaurantId, rating);
+        user.setNotes(notes);
+        return userRepository.save(user);
+    }
 }
