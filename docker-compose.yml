@@ -8,8 +8,10 @@ services:
     volumes:
       - biblio-mysql-data:/var/lib/mysql
     environment: 
-       MYSQL_ROOT_PASSWORD: $${{secrets.MYSQL_ROOT_PASSWORD}}
-       MYSQL_DATABASE: $${{secrets.MYSQL_DATABASE}}
+      MYSQL_ROOT_PASSWORD: $${{secrets.MYSQL_ROOT_PASSWORD}}
+      MYSQL_DATABASE: $${{secrets.MYSQL_DATABASE}}
+      MYSQL_USER:  $${{secrets.MYSQL_USER}}
+      MYSQL_PASSWORD:  $${{secrets.MYSQL_PASSWORD}}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -34,6 +36,9 @@ services:
 
   frontend:
     image: yelp-ea-front
+    build:
+      context: ./yelp-ea
+      dockerfile: Dockerfile
     depends_on:
       - backend
     ports:
