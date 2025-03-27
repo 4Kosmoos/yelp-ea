@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'ListeRestaurantNote', component: RestaurantListeNoteComponent },
   { path: 'restaurant/:id', component: RestaurantDetailComponent },
   { path: 'ajout', component: RestaurantFormComponent, canActivate: [AuthGuardRestaurateur] },
-  { path: 'restaurant/edit/:id', component: RestaurantFormComponent, canActivate: [AuthGuardRestaurateur] },
+  { path: 'edit/:id', component: RestaurantFormComponent, canActivate: [AuthGuardRestaurateur] },
   { path: 'dashboard-restaurateur', component: DashboardRestaurateurComponent }, //, canActivate: [AuthGuardRestaurateur]
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuardAdmin] }
 ];

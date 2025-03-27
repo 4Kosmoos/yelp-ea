@@ -10,13 +10,6 @@
   Aucun restaurant trouvé.
 </div>
 
-<!-- Bouton d'ajout -->
-<div *ngIf="!isLoading" class="text-right mt-4">
-  <button class="btn btn-success" (click)="addRestaurant()">
-    <i class="bi bi-plus-circle"></i> Ajouter un restaurant
-  </button>
-</div>
-
 <!-- Affichage de la liste des restaurants -->
 <div *ngIf="!isLoading && restaurants && restaurants.length > 0" class="restaurant-list mt-4">
   <h3>Liste de mes restaurants</h3>
@@ -31,7 +24,6 @@
         <th>Description</th>
         <th>Téléphone</th>
         <th>Catégorie</th>
-        <th>Coordonnées</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -42,10 +34,9 @@
         <td>{{ restaurant.description }}</td>
         <td>{{ restaurant.phone }}</td>
         <td>{{ restaurant.category }}</td>
-        <td>{{ restaurant.rating }}</td>
         <td>
           <!-- Boutons d'action (modifier, supprimer) -->
-          <button class="btn btn-warning btn-sm" >
+          <button class="btn btn-warning btn-sm" (click)="UpdateRestaurant(restaurant.id)">
             <i class="bi bi-pencil"></i> Modifier
           </button>
           <button class="btn btn-danger btn-sm" (click)="deleteRestaurant(restaurant.id)">

@@ -27,8 +27,9 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/Create']);
   }
 
-  addRestaurant() {
+  addRestaurant(): void {
     console.log('Ajout d’un restaurant');
+    this.router.navigate(['/ajout']); // Redirection vers la page d'ajout
   }
 
   viewAllRestaurants() {

@@ -87,9 +87,20 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   updateRestaurant() {
-    const formattedCategories = this.newRestaurant.categories
-      ? this.newRestaurant.categories.split(',').map((c: string) => c.trim())
-      : [];
+    let formattedCategories: string[];
+
+    if (Array.isArray(this.newRestaurant.categories)) {
+      // Si categories est déjà un tableau, on l'utilise directement
+      formattedCategories = this.newRestaurant.categories.map((c: string) => c.trim());
+    } else if (typeof this.newRestaurant.categories === 'string') {
+      // Si categories est une chaîne de caractères, on la divise
+      formattedCategories = this.newRestaurant.categories
+        ? this.newRestaurant.categories.split(',').map((c: string) => c.trim())
+        : [];
+    } else {
+      // Si categories est de type inconnu, on le considère comme un tableau vide
+      formattedCategories = [];
+    }
 
     const updatedRestaurant = {
       name: this.newRestaurant.name,
@@ -112,4 +123,5 @@ export class RestaurantFormComponent implements OnInit {
       }
     });
   }
+
 }

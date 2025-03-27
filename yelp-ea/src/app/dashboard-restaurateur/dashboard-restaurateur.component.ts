@@ -36,9 +36,9 @@ export class DashboardRestaurateurComponent implements OnInit {
     });
   }
 
-  addRestaurant(): void {
-    console.log('Ajout d’un restaurant');
-    this.router.navigate(['/ajout']); // Redirection vers la page d'ajout
+  UpdateRestaurant(restaurantId: number): void {
+    console.log('Modification d’un restaurant');
+    this.router.navigate([`/edit/${restaurantId}`]); // Redirection vers la page de modification avec l'ID du restaurant
   }
 
   // Méthode pour supprimer un restaurant
