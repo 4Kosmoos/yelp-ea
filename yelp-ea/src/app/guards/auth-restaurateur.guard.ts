@@ -12,7 +12,9 @@ export class AuthGuardRestaurateur implements CanActivate {
   canActivate(): boolean {
     const role = this.authService.getUserRole(); // Récupération du rôle utilisateur
     if (role === UserRole.owner) {
-      return true; // Accès autorisé
+      console.log("le role est" + role);
+      return true;
+      this.router.navigate(['/dashboard-restaurateur']);
     }
     this.router.navigate(['/login']); // Redirection si ce n'est pas un restaurateur
     return false;

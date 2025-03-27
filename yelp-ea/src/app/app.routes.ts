@@ -8,6 +8,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AuthGuardRestaurateur } from './guards/auth-restaurateur.guard';
 import { AuthGuardAdmin } from './guards/auth-admin.guard';
 import {RestaurantListeNoteComponent} from './restaurant-liste-note/restaurant-liste-note.component';
+import {RetaurantNoteUserListeComponent} from './retaurant-note-user-liste/retaurant-note-user-liste.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'restaurant', component: RestaurantListComponent },
   { path: 'ListeRestaurantNote', component: RestaurantListeNoteComponent },
+  { path: 'restaurantNote', component: RetaurantNoteUserListeComponent },
   { path: 'restaurant/:id', component: RestaurantDetailComponent },
   { path: 'ajout', component: RestaurantFormComponent, canActivate: [AuthGuardRestaurateur] },
   { path: 'edit/:id', component: RestaurantFormComponent, canActivate: [AuthGuardRestaurateur] },

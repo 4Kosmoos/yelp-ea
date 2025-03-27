@@ -39,5 +39,10 @@ export class RestaurantService {
     return this.httpClient.post(`/${id}/rate`, { rating });
   }
 
+  // Récupérer les restaurants notés par un utilisateur
+  getRestaurantsRatedByUser(userId: number): Observable<Restaurant[]> {
+    return this.httpClient.get<Restaurant[]>(`${this.API_URL}/ratedBy/${userId}`);
+  }
+
 
 }

@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ListeRestoNotePage() {
     console.log('Autre page');
-    this.router.navigate(['/ListeRestaurantNote']);
+    this.router.navigate(['/restaurantNote']);
   }
 
   viewUsers() {

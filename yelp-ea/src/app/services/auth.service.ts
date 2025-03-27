@@ -12,9 +12,9 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
   private fakeUsers: User[] = [
-    { id: 1, login: 'owner', password: 'ownerpass', userRole: UserRole.owner, notes: new Map(), resto: [] },
+    { id: 3, login: 'owner', password: 'ownerpass', userRole: UserRole.owner, notes: new Map(), resto: [] },
     { id: 2, login: 'user', password: 'userpass', userRole: UserRole.customer, notes: new Map(), resto: [] },
-    { id: 3, login: 'admin', password: 'adminpass', userRole: UserRole.admin, notes: new Map(), resto: [] }
+    { id: 1, login: 'admin', password: 'adminpass', userRole: UserRole.admin, notes: new Map(), resto: [] }
   ];
 
   constructor(private http: HttpClient) {
