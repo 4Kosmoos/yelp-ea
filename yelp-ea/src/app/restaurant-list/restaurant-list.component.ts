@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RestaurantService } from '../services/restaurant.service';
-import { Restaurant } from '../models/restaurant.model';
-import {NgClass} from '@angular/common';
+import { Restaurant, User } from '../models/restaurant.model';
+import { AuthService } from '../services/auth.service'; // Import du service AuthService
 import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { UserService } from '../services/UserService';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -16,14 +18,22 @@ import { CommonModule } from '@angular/common';
 export class RestaurantListComponent implements OnInit {
   restaurants: Restaurant[] = [];
   isLoading = true;
-
   selectedRestaurant: Restaurant | null = null;
   selectedRating: number = 0;
-  isModalOpen: boolean = false; // Gère l'affichage de la modal
+  isModalOpen: boolean = false;
 
-  constructor(private restaurantService: RestaurantService) {}
+  constructor(
+    private restaurantService: RestaurantService,
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.loadRestaurants();  // Charge les restaurants au démarrage
+  }
+
+  // Fonction pour charger les restaurants
+  loadRestaurants() {
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
         this.restaurants = data;
@@ -36,29 +46,38 @@ export class RestaurantListComponent implements OnInit {
     });
   }
 
-  // Ouvre la modal de notation
   openRatingModal(restaurant: Restaurant) {
     this.selectedRestaurant = restaurant;
     this.selectedRating = 0;
     this.isModalOpen = true;
   }
 
-  // Sélectionne une note
   selectRating(star: number) {
     this.selectedRating = star;
   }
 
-  // Soumet la note
   submitRating() {
     if (this.selectedRestaurant) {
-      console.log(`Note attribuée à ${this.selectedRestaurant.name} : ${this.selectedRating} étoiles`);
+      console.log("Restaurant sélectionné :", this.selectedRestaurant);
+      console.log("Note sélectionnée :", this.selectedRating);
 
-      this.restaurantService.rateRestaurant(this.selectedRestaurant.id, this.selectedRating).subscribe({
-        next: () => {
-          alert("Note enregistrée !");
+      const user = this.authService.getCurrentUser();  // Récupère l'utilisateur connecté
+      const userId = user ? user.id : 1;  // Utilise l'ID de l'utilisateur connecté, ou un ID par défaut
+      const restaurantId = this.selectedRestaurant.id;
+      const rating = this.selectedRating;
+
+      console.log("Données envoyées au serveur :");
+      console.log(`userId: ${userId}, restaurantId: ${restaurantId}, rating: ${rating}`);
+
+      // Appel du service pour ajouter la note
+      this.userService.addRating(userId, restaurantId, rating).subscribe({
+        next: (user) => {
+          console.log("Réponse du serveur : Note enregistrée", user);
+          // Recharge la liste des restaurants après l'ajout de la note
+          this.loadRestaurants();
           this.selectedRestaurant = null;
           this.selectedRating = 0;
-          this.isModalOpen = false; // Ferme la modal
+          this.isModalOpen = false;  // Ferme la modal
         },
         error: (err) => {
           console.error("Erreur lors de l'enregistrement de la note", err);
@@ -67,7 +86,6 @@ export class RestaurantListComponent implements OnInit {
     }
   }
 
-  // Ferme la modal
   closeModal() {
     this.isModalOpen = false;
   }

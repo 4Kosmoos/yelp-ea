@@ -24,6 +24,7 @@ export class LoginComponent {
     this.authService.login(this.loginData.login, this.loginData.password).subscribe(
       (user: User | null) => {
         if (user) {
+          this.authService.setCurrentUser(user); // Stocke l'utilisateur connecté
           switch (user.userRole) {
             case UserRole.customer:
               this.router.navigate(['/restaurant']);
@@ -46,4 +47,5 @@ export class LoginComponent {
       }
     );
   }
+
 }
