@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Restaurant } from '../models/restaurant.model';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestaurantService {
+  readonly API_URL = "http://localhost:8080/restaurants"; // URL de base de l'API
+
+  constructor(private httpClient: HttpClient) { } // Injection du service HttpClient
+
+  //recupéré tous les restaurants
+  getRestaurants(): Observable<Restaurant[]> {
+    return this.httpClient.get<Restaurant[]>(`${this.API_URL}/all`);
+  }
+
   private restaurants: Restaurant[] = [
     {
       id: 1,
