@@ -7,6 +7,8 @@ import com.esiea.yelpeaapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +65,23 @@ public class RestaurantService {
         repository.deleteById(id);
     }
 
+    public List<Restaurant> getRestaurantsRatedByUser(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + userId));
+        Map<Integer, Integer> notes = user.getNotes();
+        if (notes == null || notes.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Restaurant> ratedRestaurants = new ArrayList<>();
+        for (Integer restaurantId : notes.keySet()) {
+            repository.findById(restaurantId).ifPresent(restaurant -> {
+                double rating = ratingCalcul(restaurant.getId());
+                restaurant.setRating(rating);
+                ratedRestaurants.add(restaurant);
+            });
+        }
+        return ratedRestaurants;
+    }
     public double ratingCalcul(int restaurantId) {
         List<User> users = userRepository.findAll();
         int sum = 0;

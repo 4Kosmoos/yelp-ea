@@ -71,5 +71,14 @@ public class RestaurantController {
             return ResponseEntity.status(500).body("Erreur : " + e.getMessage());
         }
     }
-
+    @GetMapping("/ratedBy/{userId}")
+    public ResponseEntity<List<Restaurant>> getRestaurantsRatedByUser(@PathVariable int userId) {
+        try {
+            List<Restaurant> restaurants = service.getRestaurantsRatedByUser(userId);
+            return ResponseEntity.ok(restaurants);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }
