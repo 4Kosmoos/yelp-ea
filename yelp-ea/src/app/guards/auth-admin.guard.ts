@@ -10,9 +10,9 @@ export class AuthGuardAdmin implements CanActivate {
 
   canActivate(): boolean {
     const role = this.authService.getUserRole(); // Récupération du rôle
-    if (role === 'admin') {
-      return true; // Accès autorisé
-    }
+    // if (role === 'admin') {
+    //   return true; // Accès autorisé
+    // }
     this.router.navigate(['/login']); // Redirection si ce n'est pas un admin
     return false;
   }

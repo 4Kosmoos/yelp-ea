@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RestaurantService } from '../services/restaurant.service';
 import { Restaurant } from '../models/restaurant.model';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-restaurateur',
@@ -17,7 +17,7 @@ export class DashboardRestaurateurComponent implements OnInit {
   isLoading = true;
   showForm = false;
 
-  constructor(private restaurantService: RestaurantService, private route: ActivatedRoute) {}
+  constructor(private restaurantService: RestaurantService, private router: Router) {}
 
   ngOnInit(): void {
     this.restaurantService.getRestaurants().subscribe({
@@ -31,6 +31,13 @@ export class DashboardRestaurateurComponent implements OnInit {
       }
     });
   }
+
+  addRestaurant() {
+    console.log('Ajout d’un restaurant');
+    // Logique pour ajouter un restaurant, rediriger vers un formulaire, etc.
+    this.router.navigate(['/ajout']); // Exemple de redirection vers la page d'ajout
+  }
+
 
   toggleForm() {
     this.showForm = !this.showForm;

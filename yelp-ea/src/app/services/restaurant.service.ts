@@ -22,27 +22,22 @@ export class RestaurantService {
   }
 
   //Ajouter un restaurant
-  addRestaurant(name: string, address: string, phone: string, description: string, category: RestaurantCategories[], rating: number): Observable<Restaurant> {
-    let params = new URLSearchParams();
-    params.set('name', name);
-    params.set('address', address);
-    params.set('phone', phone);
-    params.set('description', description);
-    params.set('category', JSON.stringify(category));
-    params.set('rating', rating.toString());
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
-    });
-
-    return this.httpClient.post<Restaurant>(`${this.API_URL}/add`, params.toString(), { headers });
+  addRestaurant(newRestaurant: any): Observable<any> {
+    return this.httpClient.post(this.API_URL, newRestaurant); // Assure-toi que l
   }
-
   //Modifier un restaurant
-
+  updateRestaurant(id: number, updatedRestaurant: any): Observable<any> {
+    // On envoie une requête PUT vers l'API pour mettre à jour le restaurant
+    return this.httpClient.put(`${this.API_URL}/${id}`, updatedRestaurant);
+  }
   //Supprimer un restaurant
   deleteRestaurant(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.API_URL}/delete/${id}`);
   }
+
+  rateRestaurant(id: number, rating: number) {
+    return this.httpClient.post(`/${id}/rate`, { rating });
+  }
+
 
 }

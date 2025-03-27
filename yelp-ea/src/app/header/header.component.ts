@@ -1,28 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // Pour ngIf, ngFor, etc.
+import { CommonModule } from '@angular/common';
+import { UserRole } from '../models/restaurant.model';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  standalone: true,  // Indiquer que ce composant est standalone
-  imports: [CommonModule],  // Ajouter CommonModule
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  userRole: UserRole | null = null; // On initialise à null
 
-  // Définir un rôle en dur pour l'utilisateur
-  userRole: string = 'restaurateur';  // Change cette valeur pour tester les autres rôles
-
-  constructor() { }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Ici, on pourrait récupérer le rôle d'un utilisateur authentifié si c'était le cas
-    // Par exemple, this.userRole = this.userService.getUserRole();
+    // Récupérer le rôle de l'utilisateur connecté
+    this.userRole = this.authService.getUserRole();
   }
 
   // Méthodes pour gérer les actions des boutons
   viewRestaurants() {
     console.log('Affichage des restaurants du restaurateur');
+    this.router.navigate(['/Create']);
   }
 
   addRestaurant() {
@@ -44,4 +46,6 @@ export class HeaderComponent implements OnInit {
   viewRestaurateurs() {
     console.log('Affichage des restaurateurs');
   }
+
+  protected readonly UserRole = UserRole;
 }

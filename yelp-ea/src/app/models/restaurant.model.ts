@@ -8,15 +8,6 @@ export interface Restaurant {
     rating: number;
   }
 
-export interface User {
-  id: number;
-  login: string;
-  password: string;
-  userRole: UserRole;
-  notes: Map<number, number>;
-  resto: Restaurant[];
-}
-
 export enum RestaurantCategories {
   Chinois,
   libanais,
@@ -29,6 +20,15 @@ export enum RestaurantCategories {
   italien,
 }
 
+
+export interface User {
+  id: number;
+  login: string;
+  password: string;
+  userRole: UserRole;
+  notes: Map<number, number>;
+  resto: Restaurant[];
+}
 
 export enum UserRole {
   customer,

@@ -1,1 +1,15 @@
-<p>login works!</p>
+<form (ngSubmit)="login()">
+  <div>
+    <label for="login">Login:</label>
+    <input id="login" type="text" [(ngModel)]="loginData.login" name="login" required>
+  </div>
+
+  <div>
+    <label for="password">Mot de passe:</label>
+    <input id="password" type="password" [(ngModel)]="loginData.password" name="password" required>
+  </div>
+
+  <button type="submit">Se connecter</button>
+
+  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+</form>
