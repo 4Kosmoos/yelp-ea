@@ -33,17 +33,23 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> getMethodName(@PathVariable int id) {
-        return ResponseEntity.ok(service.get(id));
+        try{
+            System.out.println("⚡ Récupération du restaurant avec l'ID : " + id);
+            return ResponseEntity.ok(service.get(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PostMapping
     public ResponseEntity<?> createRestaurant(@RequestBody Restaurant restaurant) {
         try {
-            Restaurant created = service.create(restaurant);
-            return ResponseEntity.ok(created);
+            System.out.println("⚡ Ajout d'un nouvel utilisateur...");
+            return ResponseEntity.ok(service.add(restaurant));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Erreur : " + e.getMessage());
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -51,13 +57,24 @@ public class RestaurantController {
     public ResponseEntity<Restaurant> updateRestaurant(
             @PathVariable int id,
             @RequestBody Restaurant updatedRestaurant) {
-        Restaurant updated = service.update(id, updatedRestaurant);
-        return ResponseEntity.ok(updated);
+        try {
+            System.out.println("⚡ Mise à jour du restaurant avec l'ID : " + id);
+            return ResponseEntity.ok(service.update(id, updatedRestaurant));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRestaurant(@PathVariable int id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteRestaurant(@PathVariable int id) {
+        try{
+            System.out.println("⚡ Suppression du restaurant avec l'ID : " + id);
+            service.delete(id);
+            return ResponseEntity.ok("restaurant supprimé avec succès !");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Erreur : " + e.getMessage());
+        }
     }
 
 }

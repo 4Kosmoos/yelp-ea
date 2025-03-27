@@ -29,7 +29,6 @@ public class UserController {
         }
     }
 
-    // Lire un utilisateur par ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         try{
@@ -41,7 +40,6 @@ public class UserController {
         }
     }
 
-    // Ajouter un nouvel utilisateur
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
@@ -53,7 +51,6 @@ public class UserController {
         }
     }
 
-    //  Mettre à jour un utilisateur
     @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
         try {
@@ -65,7 +62,6 @@ public class UserController {
         }
     }
 
-    // Supprimer un utilisateur
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id) {
         try{

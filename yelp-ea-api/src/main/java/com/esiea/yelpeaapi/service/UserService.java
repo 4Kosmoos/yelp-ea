@@ -15,23 +15,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Lire tous les utilisateurs
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    // Lire un utilisateur par ID
     public User get(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
     }
 
-    // Ajouter un nouvel utilisateur
     public User add(User user) {
         return userRepository.save(user);
     }
 
-    //  Mettre à jour un utilisateur
     public User update(int id, User updatedUser) {
         User existingUser = get(id);
         existingUser.setLogin(updatedUser.getLogin());
@@ -40,7 +36,6 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    // Supprimer un utilisateur
     public void delete(int id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + id);

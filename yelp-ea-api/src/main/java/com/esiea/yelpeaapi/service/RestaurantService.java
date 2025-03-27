@@ -21,11 +21,11 @@ public class RestaurantService {
         return repository.findAll();
     }
 
-    public Restaurant get(int index) {
-        return repository.findById(index).orElseThrow(() -> new RuntimeException("Show not found"));
-    }
+    public Restaurant get(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Restaurant non trouvé"));    }
 
-    public Restaurant create(Restaurant restaurant) {
+    public Restaurant add(Restaurant restaurant) {
         return repository.save(restaurant);
     }
 
@@ -41,7 +41,9 @@ public class RestaurantService {
     }
 
     public void delete(int id) {
-        get(id);
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + id);
+        }
         repository.deleteById(id);
     }
 }
