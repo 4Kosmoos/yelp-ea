@@ -4,8 +4,19 @@ meta {
   seq: 4
 }
 
-get {
-  url: http://localhost:8080/users/update/{id}
-  body: none
-  auth: inherit
+put {
+  url: http://localhost:8080/users/update/2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "login":"ad",
+    "password":"ad"
+  }
+}
+
+body:form-urlencoded {
+  : 
 }
