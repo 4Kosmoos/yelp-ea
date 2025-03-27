@@ -21,7 +21,6 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
         try {
-            System.out.println("⚡ Récupération de tous les utilisateurs...");
             return ResponseEntity.ok(service.getAll());
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,7 +31,6 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         try{
-            System.out.println("⚡ Récupération de l'utilisateur avec l'ID : " + id);
             return ResponseEntity.ok(service.get(id));
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +41,6 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            System.out.println("⚡ Ajout d'un nouvel utilisateur...");
             return ResponseEntity.ok(service.add(user));
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +51,6 @@ public class UserController {
     @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
         try {
-            System.out.println("⚡ Mise à jour de l'utilisateur avec l'ID : " + id);
             return ResponseEntity.ok(service.update(id, updatedUser));
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +61,6 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id) {
         try{
-            System.out.println("⚡ Suppression de l'utilisateur avec l'ID : " + id);
             service.delete(id);
             return ResponseEntity.ok("Utilisateur supprimé avec succès !");
         } catch (Exception e) {
