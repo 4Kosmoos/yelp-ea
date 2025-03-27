@@ -4,7 +4,6 @@ export interface Restaurant {
     address: string;
     phone: string;
     description: string;
-    //Liste de categories
     category: RestaurantCategories[];
     rating: number;
   }
