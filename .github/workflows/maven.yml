@@ -74,7 +74,9 @@ jobs:
           
       # Construire l'image Docker
       - name: Docker build
-        run: docker build -t my-app .
+        run: |
+          cd yelp-ea-api
+          docker build -t my-app .
 
       # Pousser l'image Docker vers le registre
       - name: Docker push
