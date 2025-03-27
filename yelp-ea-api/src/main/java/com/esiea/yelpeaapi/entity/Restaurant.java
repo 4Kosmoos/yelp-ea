@@ -14,13 +14,18 @@ public class Restaurant {
     private int id;
     private String name;
     private String address;
+
+    @Column(nullable = true)
     private String phone;
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "restaurant_categories", joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Column(name = "category", nullable = true)
     @Enumerated(EnumType.STRING)
     private List<RestaurantCategories> categories;
+
+    @Column(nullable = true)
     private float rating;
 
     public int getId() {

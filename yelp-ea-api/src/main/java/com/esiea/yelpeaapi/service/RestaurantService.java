@@ -25,5 +25,23 @@ public class RestaurantService {
         return repository.findById(index).orElseThrow(() -> new RuntimeException("Show not found"));
     }
 
+    public Restaurant create(Restaurant restaurant) {
+        return repository.save(restaurant);
+    }
 
+    public Restaurant update(int id, Restaurant updatedRestaurant) {
+        Restaurant existing = get(id);
+        existing.setName(updatedRestaurant.getName());
+        existing.setAddress(updatedRestaurant.getAddress());
+        existing.setPhone(updatedRestaurant.getPhone());
+        existing.setDescription(updatedRestaurant.getDescription());
+        existing.setCategories(updatedRestaurant.getCategories());
+        existing.setRating(updatedRestaurant.getRating());
+        return repository.save(existing);
+    }
+
+    public void delete(int id) {
+        get(id);
+        repository.deleteById(id);
+    }
 }
