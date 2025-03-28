@@ -56,6 +56,33 @@ jobs:
           cd yelp-ea-api
           mvn package
 
+      - name: Install dependencies for Selenium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl unzip
+          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo apt-get install -y wget
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          sudo apt-get -y install -f
+
+      - name: Install Python dependencies for Selenium
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium webdriver-manager
+
+      - name: Vérifier l'emplacement et si on trouve le selenium
+        run: |
+          pwd && ls -R
+          ls -l selenium
+
+      - name: Run Selenium tests
+        run: |
+          cd selenium
+          python test_dashboard_restaurateur.py
+
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
         run: docker-compose down
@@ -71,8 +98,8 @@ jobs:
       #- name: Docker build
       #  run: |
       #    cd yelp-ea-api
-      #    docker build -t my-app .
+      #    docker build -t back .
 
       # Pousser l'image Docker vers le registre
       #- name: Docker push
-      #  run: docker push my-app
+      #  run: docker push back
