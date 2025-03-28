@@ -32,7 +32,6 @@ jobs:
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           # Vérifier que Docker est bien installé
           sudo docker --version
-
       # Installer Docker Compose via CLI
       - name: Compose in CLI
         run: |
@@ -42,6 +41,10 @@ jobs:
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
           # Ajouter docker-compose au PATH
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
+      # Vérifier l'installation de Docker Compose
+      #- name: Verify Docker Compose installation
+      #  run: |
+      #    docker-compose --version
 
       # Installer Java 21
       - name: Set up JDK 21
@@ -50,17 +53,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-  test:
-    runs-on: ubuntu-latest
-    needs: ci
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Vérifier la version de Java
-        run: java -version
-
-        
       # Test Unitaire back
       - name: Run unit tests
         run: |
