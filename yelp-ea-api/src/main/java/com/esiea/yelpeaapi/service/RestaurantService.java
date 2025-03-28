@@ -110,10 +110,14 @@ public class RestaurantService {
             return Collections.emptyList();
         }
         List<Restaurant> ratedRestaurants = new ArrayList<>();
-        for (Integer restaurantId : notes.keySet()) {
+        for (Map.Entry<Integer, Integer> entry : notes.entrySet()) {
+            Integer restaurantId = entry.getKey();
+            Integer noteFromCustomer = entry.getValue();
+
             repository.findById(restaurantId).ifPresent(restaurant -> {
                 double rating = ratingCalcul(restaurant.getId());
                 restaurant.setRating(rating);
+                restaurant.setNoteFromCustomer(noteFromCustomer);
                 ratedRestaurants.add(restaurant);
             });
         }

@@ -28,6 +28,9 @@ public class Restaurant {
     @Transient
     private double rating;
 
+    @Transient
+    private int noteFromCustomer;
+
     public int getId() {
         return id;
     }
@@ -94,6 +97,24 @@ public class Restaurant {
         this.description = description;
         this.categories = categories;
         this.rating = rating;
+    }
+    public Restaurant(int id, String name, String address, String phone, String description, List<RestaurantCategories> categories, float rating, int noteFromCustomer) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.description = description;
+        this.categories = categories;
+        this.rating = rating;
+        this.noteFromCustomer = noteFromCustomer;
+    }
+
+    public int getNoteFromCustomer() {
+        return noteFromCustomer;
+    }
+
+    public void setNoteFromCustomer(int noteFromCustomer) {
+        this.noteFromCustomer = noteFromCustomer;
     }
 }
 
