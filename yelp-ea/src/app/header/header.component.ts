@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // S'abonner à l'utilisateur actuel pour mettre à jour le rôle
     this.userRoleSubscription = this.authService.getCurrentUserObservable().subscribe(user => {
-      this.userRole = user?.userRole ?? null;
+      this.userRole = user?.role ?? null;
     });
   }
 
