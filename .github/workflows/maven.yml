@@ -73,8 +73,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium
 
-      - name: Vérifier l'arborescence des fichiers
-        run: ls -R
+      - name: Vérifier où je suis après les tests unitaires
+        run: pwd && ls -R
         
       - name: Vérifier la présence du script Selenium
         run: ls -l selenium
