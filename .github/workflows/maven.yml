@@ -32,6 +32,7 @@ jobs:
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           # Vérifier que Docker est bien installé
           sudo docker --version
+          
       # Installer Docker Compose via CLI
       - name: Compose in CLI
         run: |
@@ -41,10 +42,6 @@ jobs:
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
           # Ajouter docker-compose au PATH
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
-      # Vérifier l'installation de Docker Compose
-      #- name: Verify Docker Compose installation
-      #  run: |
-      #    docker-compose --version
 
       # Installer Java 21
       - name: Set up JDK 21
@@ -79,8 +76,6 @@ jobs:
       - name: Vérifier la présence du script Selenium
         run: ls -l selenium
       
-      - name: Installer les dépendances Selenium
-        run: pip install selenium webdriver-manager
 
       - name: Run Selenium tests
         run: |
