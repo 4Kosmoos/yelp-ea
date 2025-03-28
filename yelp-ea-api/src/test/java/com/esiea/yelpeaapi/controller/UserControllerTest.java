@@ -31,16 +31,10 @@ class UserControllerTest {
 
     @Test
     void getAllUsers() {
-        // Arrange
         User user1 = new User(1, "john_doe", "password123", UserRole.customer, Map.of(10, 4), null);
         User user2 = new User(2, "jane_doe", "password123", UserRole.owner, null, List.of(5, 6));
-
         when(userService.getAll()).thenReturn(List.of(user1, user2));
-
-        // Act
         ResponseEntity<?> response = userController.getAllUsers();
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody() instanceof List);
         assertEquals(2, ((List<?>) response.getBody()).size());
@@ -49,15 +43,10 @@ class UserControllerTest {
 
     @Test
     void getUserById() {
-        // Arrange
         int userId = 1;
         User user = new User(userId, "john_doe", "password123", UserRole.customer, Map.of(10, 5), null);
         when(userService.get(userId)).thenReturn(user);
-
-        // Act
         ResponseEntity<User> response = userController.getUserById(userId);
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
@@ -67,15 +56,10 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_Customer() {
-        // Arrange
+    void createCustomer() {
         User newUser = new User(3, "new_customer", "password123", UserRole.customer, Map.of(8, 3, 12, 5), null);
         when(userService.add(newUser)).thenReturn(newUser);
-
-        // Act
         ResponseEntity<User> response = userController.createUser(newUser);
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals(UserRole.customer, response.getBody().getRole());
@@ -85,15 +69,10 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_Owner() {
-        // Arrange
+    void createOwner() {
         User newOwner = new User(4, "restaurant_owner", "password123", UserRole.owner, null, List.of(7, 9));
         when(userService.add(newOwner)).thenReturn(newOwner);
-
-        // Act
         ResponseEntity<User> response = userController.createUser(newOwner);
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals(UserRole.owner, response.getBody().getRole());
@@ -104,15 +83,10 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
-        // Arrange
         int userId = 1;
         User updatedUser = new User(userId, "john_doe", "newpassword", UserRole.customer, Map.of(11, 4), null);
         when(userService.update(userId, updatedUser)).thenReturn(updatedUser);
-
-        // Act
         ResponseEntity<User> response = userController.updateUser(userId, updatedUser);
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(updatedUser, response.getBody());
         verify(userService, times(1)).update(userId, updatedUser);
@@ -120,16 +94,25 @@ class UserControllerTest {
 
     @Test
     void deleteUser() {
-        // Arrange
         int userId = 1;
         doNothing().when(userService).delete(userId);
-
-        // Act
         ResponseEntity<String> response = userController.deleteUser(userId);
-
-        // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Utilisateur supprimé avec succès !", response.getBody());
         verify(userService, times(1)).delete(userId);
+    }
+
+    @Test
+    void rateRestaurant() {
+        int userId = 1;
+        int restaurantId = 10;
+        int rating = 8;
+        User updatedUser = new User(userId, "john_doe", "password123", UserRole.customer, Map.of(restaurantId, rating), null);
+        when(userService.addRating(userId, restaurantId, rating)).thenReturn(updatedUser);
+        ResponseEntity<User> response = userController.rateRestaurant(userId, restaurantId, rating);
+        assertEquals(200, response.getStatusCodeValue());
+        assertNotNull(response.getBody());
+        assertEquals(updatedUser, response.getBody());
+        verify(userService, times(1)).addRating(userId, restaurantId, rating);
     }
 }
