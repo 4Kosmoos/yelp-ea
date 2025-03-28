@@ -71,7 +71,7 @@ jobs:
       # Démarrer le serveur Angular
       - name: Start Angular server
         run: |
-          cd yelp-ea-client
+          cd yelp-ea
           npm install
           npm run start -- --host 0.0.0.0 --disable-host-check &
           
