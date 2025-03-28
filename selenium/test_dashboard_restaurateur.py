@@ -10,6 +10,7 @@ import shutil
 import os
 import uuid
 
+
 # Créer un répertoire temporaire unique pour le profil Chrome
 temp_profile_dir = tempfile.mkdtemp()
 

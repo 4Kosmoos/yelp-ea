@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RestaurantService } from '../services/restaurant.service';
 import { Restaurant, User } from '../models/restaurant.model';
-import { AuthService } from '../services/auth.service'; // Import du service AuthService
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { NgClass } from '@angular/common';
 import { UserService } from '../services/UserService';
@@ -21,6 +21,7 @@ export class RestaurantListComponent implements OnInit {
   selectedRestaurant: Restaurant | null = null;
   selectedRating: number = 0;
   isModalOpen: boolean = false;
+  currentUser: User | null = null;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -29,7 +30,13 @@ export class RestaurantListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadRestaurants();  // Charge les restaurants au démarrage
+    this.loadRestaurants(); // Charge les restaurants au démarrage
+
+    // 🔹 Abonne-toi à l'utilisateur courant pour le récupérer automatiquement
+    this.authService.getCurrentUserObservable().subscribe(user => {
+      this.currentUser = user;
+      console.log("Utilisateur connecté :", this.currentUser);
+    });
   }
 
   // Fonction pour charger les restaurants
@@ -57,12 +64,11 @@ export class RestaurantListComponent implements OnInit {
   }
 
   submitRating() {
-    if (this.selectedRestaurant) {
+    if (this.selectedRestaurant && this.currentUser) { // 🔹 Vérifie si l'utilisateur est connecté
       console.log("Restaurant sélectionné :", this.selectedRestaurant);
       console.log("Note sélectionnée :", this.selectedRating);
 
-      const user = this.authService.getCurrentUser();  // Récupère l'utilisateur connecté
-      const userId = user ? user.id : 1;  // Utilise l'ID de l'utilisateur connecté, ou un ID par défaut
+      const userId = this.currentUser.id;
       const restaurantId = this.selectedRestaurant.id;
       const rating = this.selectedRating;
 
@@ -73,16 +79,17 @@ export class RestaurantListComponent implements OnInit {
       this.userService.addRating(userId, restaurantId, rating).subscribe({
         next: (user) => {
           console.log("Réponse du serveur : Note enregistrée", user);
-          // Recharge la liste des restaurants après l'ajout de la note
           this.loadRestaurants();
           this.selectedRestaurant = null;
           this.selectedRating = 0;
-          this.isModalOpen = false;  // Ferme la modal
+          this.isModalOpen = false; // Ferme la modal
         },
         error: (err) => {
           console.error("Erreur lors de l'enregistrement de la note", err);
         }
       });
+    } else {
+      console.error("Aucun utilisateur connecté. Impossible d'enregistrer la note.");
     }
   }
 

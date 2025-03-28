@@ -38,7 +38,7 @@ export class DashboardRestaurateurComponent implements OnInit {
 
   UpdateRestaurant(restaurantId: number): void {
     console.log('Modification d’un restaurant');
-    this.router.navigate([`/edit/${restaurantId}`]); // Redirection vers la page de modification avec l'ID du restaurant
+    this.router.navigate([`/edit/${restaurantId}`])
   }
 
   // Méthode pour supprimer un restaurant

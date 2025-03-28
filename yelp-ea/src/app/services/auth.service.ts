@@ -7,45 +7,52 @@ import { User, UserRole } from '../models/restaurant.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/users'; // Remplace par ton API
-  private currentUser: User | null = null;
-  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private apiUrl = 'http://localhost:8080/users'; // Remplace par ton API
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable(); // Observable exposé
 
   private fakeUsers: User[] = [
     { id: 3, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
     { id: 2, login: 'user', password: 'userpass', role: UserRole.customer, notes: new Map(), resto: [] },
+    { id: 4, login: 'user2', password: 'user2pass', role: UserRole.customer, notes: new Map(), resto: [] },
     { id: 1, login: 'admin', password: 'adminpass', role: UserRole.admin, notes: new Map(), resto: [] }
   ];
 
   constructor(private http: HttpClient) {
-    // Charger l'utilisateur stocké si disponible
+    this.loadStoredUser(); // Charger l'utilisateur stocké au démarrage
+  }
+
+  /** 🔹 Charge l'utilisateur stocké dans `localStorage` */
+  private loadStoredUser(): void {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-      this.currentUserSubject.next(this.currentUser); // Émettre l'utilisateur courant
+      try {
+        const user: User = JSON.parse(storedUser);
+        if (user && user.id && user.login && user.role) {
+          // Convertir les notes en Map<number, number> si elles sont sous forme d'objet
+          if (user.notes && !(user.notes instanceof Map)) {
+            user.notes = new Map<number, number>(
+              Object.entries(user.notes).map(([key, value]) => [Number(key), Number(value)])
+            );
+          }
+          this.currentUserSubject.next(user);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement de l’utilisateur stocké', error);
+        localStorage.removeItem('currentUser'); // Nettoyer en cas de corruption
+      }
     }
   }
 
-  setCurrentUser(user: User) {
-    this.currentUser = user;
-  }
-
-  getCurrentUser(): User | null {
-    return this.currentUser;
-  }
-
-  /** 🔹 Récupère le rôle de l'utilisateur connecté */
-  getUserRole(): UserRole | null {
-    return this.getCurrentUser()?.role ?? null;
-  }
 
   /** 🔹 Connexion */
   login(login: string, password: string): Observable<User | null> {
     const user = this.fakeUsers.find(u => u.login === login && u.password === password);
     if (user) {
-      this.currentUser = user;
-      localStorage.setItem('currentUser', JSON.stringify(user)); // Stocker l'utilisateur
-      this.currentUserSubject.next(user); // Émettre l'utilisateur courant
+      // Convertir la Map en un objet classique avant de stocker dans localStorage
+      const userCopy = { ...user, notes: Object.fromEntries(user.notes) };
+      localStorage.setItem('currentUser', JSON.stringify(userCopy)); // Stocker l'utilisateur converti
+      this.currentUserSubject.next(user); // Met à jour l'observable
     }
     return of(user ?? null);
   }
@@ -53,12 +60,32 @@ export class AuthService {
   /** 🔹 Déconnexion */
   logout(): void {
     localStorage.removeItem('currentUser');
-    this.currentUser = null;
-    this.currentUserSubject.next(null); // Émettre null pour signaler que l'utilisateur est déconnecté
+    this.currentUserSubject.next(null); // Met à jour l'observable
   }
 
-  /** 🔹 Observable pour l'utilisateur courant */
+  /** 🔹 Vérifie si un utilisateur est connecté */
+  isLoggedIn(): boolean {
+    return !!this.currentUserSubject.value;
+  }
+
+  /** 🔹 Récupère l'utilisateur courant */
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  /** 🔹 Observable de l'utilisateur courant */
   getCurrentUserObservable(): Observable<User | null> {
-    return this.currentUserSubject.asObservable();
+    return this.currentUser$;
+  }
+
+  /** 🔹 Récupère le rôle de l'utilisateur connecté */
+  getUserRole(): UserRole | null {
+    return this.getCurrentUser()?.role ?? null;
+  }
+
+  /** 🔹 Met à jour l'utilisateur courant */
+  setCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
+    localStorage.setItem('currentUser', JSON.stringify(user));
   }
 }
