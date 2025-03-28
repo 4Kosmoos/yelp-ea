@@ -4,7 +4,17 @@ import com.esiea.yelpeaapi.entity.Restaurant;
 import com.esiea.yelpeaapi.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 import java.util.List;
 
@@ -40,10 +50,24 @@ public class RestaurantController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createRestaurant(@RequestBody Restaurant restaurant) {
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<Restaurant>> getRestaurantsForOwner(@PathVariable int ownerId) {
         try {
-            return ResponseEntity.ok(service.add(restaurant));
+            List<Restaurant> restaurants = service.getRestaurantsForOwner(ownerId);
+            return ResponseEntity.ok(restaurants);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @PostMapping("/owner/{ownerId}")
+    public ResponseEntity<?> createRestaurantForOwner(
+            @PathVariable int ownerId,
+            @RequestBody Restaurant restaurant) {
+        try {
+            Restaurant created = service.addRestaurantForOwner(ownerId, restaurant);
+            return ResponseEntity.ok(created);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(null);

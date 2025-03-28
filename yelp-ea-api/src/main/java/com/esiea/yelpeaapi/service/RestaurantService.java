@@ -1,5 +1,6 @@
 package com.esiea.yelpeaapi.service;
 
+import com.esiea.yelpeaapi.UserRole;
 import com.esiea.yelpeaapi.entity.Restaurant;
 import com.esiea.yelpeaapi.entity.User;
 import com.esiea.yelpeaapi.repository.RestaurantRepository;
@@ -44,8 +45,44 @@ public class RestaurantService {
         return restaurant;
     }
 
-    public Restaurant add(Restaurant restaurant) {
-        return repository.save(restaurant);
+
+    public List<Restaurant> getRestaurantsForOwner(int ownerId) {
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + ownerId));
+        if(owner.getRole() != UserRole.owner) {
+            throw new RuntimeException("L'utilisateur avec l'ID " + ownerId + " n'est pas un propriétaire.");
+        }
+        List<Integer> restaurantIds = owner.getResto();
+        if(restaurantIds == null || restaurantIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Restaurant> restaurants = new ArrayList<>();
+        for (Integer restId : restaurantIds) {
+            repository.findById(restId).ifPresent(restaurant -> {
+                double rating = ratingCalcul(restaurant.getId());
+                restaurant.setRating(rating);
+                restaurants.add(restaurant);
+            });
+        }
+        return restaurants;
+    }
+
+    public Restaurant addRestaurantForOwner(int id, Restaurant restaurant) {
+        User owner = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + id));
+        if (owner.getRole() != UserRole.owner) {
+            throw new RuntimeException("L'utilisateur ID " + id + " n'est pas un propriétaire !");
+        }
+        Restaurant savedRestaurant = repository.save(restaurant);
+        List<Integer> restoIds = owner.getResto();
+        if (restoIds == null) {
+            restoIds = new ArrayList<>();
+        }
+        restoIds.add(savedRestaurant.getId());
+
+        userRepository.save(owner);
+
+        return savedRestaurant;
     }
 
     public Restaurant update(int id, Restaurant updatedRestaurant) {
@@ -82,6 +119,7 @@ public class RestaurantService {
         }
         return ratedRestaurants;
     }
+
     public double ratingCalcul(int restaurantId) {
         List<User> users = userRepository.findAll();
         int sum = 0;
