@@ -64,24 +64,41 @@ jobs:
           google-chrome --version
           chromedriver --version
 
-      # Installer les dépendances Python pour Selenium
-      - name: Install Python dependencies for Selenium
-        run: |
-          python -m pip install --upgrade pip
-          pip install selenium webdriver-manager
 
-      # Vérifier que Chrome et ChromeDriver sont bien installés
-      - name: Verify installations
-        run: |
-          which google-chrome
-          which chromedriver
-          ls -l /usr/bin/chromedriver
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      # Exécuter les tests Selenium
-      - name: Run Selenium tests
+      - name: Install Angular dependencies
         run: |
-          cd selenium
-          python test_dashboard_restaurateur.py
+          cd front
+          npm ci
+
+      - name: Start Angular application
+        run: |
+          cd front
+          npm run start &
+        env:
+          CI: true
+
+      - name: Wait for Angular to be ready
+        run: |
+          echo "Waiting for Angular to start..."
+          for i in {1..30}; do
+            curl --silent --fail http://localhost:4200 && echo "Angular is ready!" && exit 0
+            echo "Waiting for Angular..."
+            sleep 2
+          done
+          echo "Angular did not start in time" && exit 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Selenium dependencies
+        run: pip install selenium webdriver-manager requests
 
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
