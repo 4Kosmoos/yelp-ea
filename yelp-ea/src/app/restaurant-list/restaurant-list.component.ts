@@ -62,7 +62,7 @@ export class RestaurantListComponent implements OnInit {
       console.log("Note sélectionnée :", this.selectedRating);
 
       const user = this.authService.getCurrentUser();  // Récupère l'utilisateur connecté
-      const userId = user ? user.id : 2;  // Utilise l'ID de l'utilisateur connecté, ou un ID par défaut
+      const userId = user ? user.id : 1;  // Utilise l'ID de l'utilisateur connecté, ou un ID par défaut
       const restaurantId = this.selectedRestaurant.id;
       const rating = this.selectedRating;
 

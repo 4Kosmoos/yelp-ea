@@ -12,9 +12,9 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
   private fakeUsers: User[] = [
-    { id: 3, login: 'owner', password: 'ownerpass', userRole: UserRole.owner, notes: new Map(), resto: [] },
-    { id: 2, login: 'user', password: 'userpass', userRole: UserRole.customer, notes: new Map(), resto: [] },
-    { id: 1, login: 'admin', password: 'adminpass', userRole: UserRole.admin, notes: new Map(), resto: [] }
+    { id: 3, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
+    { id: 2, login: 'user', password: 'userpass', role: UserRole.customer, notes: new Map(), resto: [] },
+    { id: 1, login: 'admin', password: 'adminpass', role: UserRole.admin, notes: new Map(), resto: [] }
   ];
 
   constructor(private http: HttpClient) {
@@ -36,7 +36,7 @@ export class AuthService {
 
   /** 🔹 Récupère le rôle de l'utilisateur connecté */
   getUserRole(): UserRole | null {
-    return this.getCurrentUser()?.userRole ?? null;
+    return this.getCurrentUser()?.role ?? null;
   }
 
   /** 🔹 Connexion */

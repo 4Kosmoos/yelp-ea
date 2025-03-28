@@ -24,13 +24,13 @@ export interface User {
   id: number;
   login: string;
   password: string;
-  userRole: UserRole;
-  notes: Map<number, number>;  // Remarquer que c'est une map clé-valeur
+  role: UserRole;
+  notes: Map<number, number>;
   resto: Restaurant[];
 }
 
 export enum UserRole {
-  customer,
-  owner,
-  admin
+  customer = 'client',
+  owner = 'proprietaire',
+  admin = 'admin'
 }
