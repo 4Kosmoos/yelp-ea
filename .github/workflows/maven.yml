@@ -56,6 +56,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Vérifier la version de Java
+        run: java -version
+
         
       # Test Unitaire back
       - name: Run unit tests
