@@ -59,11 +59,6 @@ jobs:
           cd yelp-ea-api
           mvn package
 
-      - name: Exécuter les tests Selenium
-        run: |
-          cd selenium
-          python test_dashboard_restaurateur.py
-
       - name: Install dependencies for Selenium
         run: |
           sudo apt-get update
