@@ -2,12 +2,12 @@ name: CiCd
 
 on:
   push:
-    branches: [ "main, back" ]
+    branches: [ "main", "back" ]
   pull_request:
-    branches: [ "main, back" ]
+    branches: [ "main", "back" ]
 
 jobs:
-  ci:
+  setup:
     runs-on: ubuntu-latest
     steps:
       # Étape de Checkout
@@ -41,13 +41,19 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+  unit_tests:
+    runs-on: ubuntu-latest
+    steps:
       # Test Unitaire back
       - name: Run unit tests
         run: |
           cd yelp-ea-api
           mvn package
-          
-          # Installer Chrome et ChromeDriver
+
+  selenium_tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Installer Chrome et ChromeDriver
       - name: Install Google Chrome & ChromeDriver
         run: |
           sudo apt-get update
@@ -68,13 +74,22 @@ jobs:
           which chromedriver
           ls -l /usr/bin/chromedriver
 
+      # Exécuter les tests Selenium
+      - name: Run Selenium tests
+        run: |
+          cd selenium
+          python test_dashboard_restaurateur.py
+
+  angular_server:
+    runs-on: ubuntu-latest
+    steps:
       # Démarrer le serveur Angular
       - name: Start Angular server
         run: |
           cd yelp-ea
           npm install
           npm run start -- --host 0.0.0.0 --disable-host-check &
-          
+
       # Attendre que le serveur Angular soit accessible
       - name: Wait for Angular server to start
         run: |
@@ -83,23 +98,23 @@ jobs:
             sleep 5
           done
 
-      # Exécuter les tests Selenium
-      - name: Run Selenium tests
-        run: |
-          cd selenium
-          python test_dashboard_restaurateur.py
-
+  docker_teardown:
+    runs-on: ubuntu-latest
+    steps:
       # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
         run: docker-compose down
-        
-      # Se connecter à Docker
+
+#  docker:
+   # runs-on: ubuntu-latest
+   # steps:
+      # Se connecter à Docker Hub
       #- name: Login to Docker Hub
       #  uses: docker/login-action@v3
       #  with:
       #    username: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
       #    password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-          
+
       # Construire l'image Docker
       #- name: Docker build
       #  run: |
