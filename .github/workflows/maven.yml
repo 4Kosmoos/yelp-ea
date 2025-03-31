@@ -136,7 +136,7 @@ jobs:
 
   # Job pour build et push de l'image Docker du backend
   build_and_push_backend:
-    needs: run_tests
+    needs: teardown
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -155,7 +155,7 @@ jobs:
 
   # Job pour build et push de l'image Docker du frontend
   build_and_push_frontend:
-    needs: run_tests
+    needs: teardown
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
