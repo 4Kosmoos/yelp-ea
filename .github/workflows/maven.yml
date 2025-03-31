@@ -92,7 +92,7 @@ jobs:
 
   # Job pour démarrer le serveur Angular
   start_angular_server:
-    needs: setup_environment
+    needs: setup_chrome
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
