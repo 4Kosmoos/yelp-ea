@@ -1,18 +1,17 @@
 on:
   push:
-    branches: [ "main", "back" ]
   pull_request:
-    branches: [ "main", "back" ]
 
 jobs:
-  # Job pour configurer l'environnement
-  setup_environment:
+  # Job CI : Configuration de l'environnement et tests unitaires
+  ci:
     runs-on: ubuntu-latest
     steps:
+      # Étape de Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Installer Docker
+      # Installer Docker avec une action dédiée
       - name: Docker install avec action
         run: |
           sudo apt-get update
@@ -22,7 +21,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           sudo docker --version
-
+          
       # Installer Docker Compose via CLI
       - name: Compose in CLI
         run: |
@@ -31,7 +30,7 @@ jobs:
           curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
-
+          
       # Installer Java 21
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -39,35 +38,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Cacher les dépendances Maven
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: maven-${{ runner.os }}-
-
-  # Job pour exécuter les tests unitaires
-  run_tests:
-    needs: setup_environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Exécuter les tests unitaires
+      # Test Unitaire back
       - name: Run unit tests
         run: |
           cd yelp-ea-api
           mvn package
-
-  # Job pour installer Chrome et ChromeDriver
-  setup_chrome:
-    needs: setup_environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
       # Installer Chrome et ChromeDriver
       - name: Install Google Chrome & ChromeDriver
@@ -83,22 +58,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium webdriver-manager
 
-      # Vérifier l'installation de Chrome et ChromeDriver
+      # Vérifier que Chrome et ChromeDriver sont bien installés
       - name: Verify installations
         run: |
           which google-chrome
           which chromedriver
           ls -l /usr/bin/chromedriver
 
-  # Job pour démarrer le serveur Angular
-  start_angular_server:
-    needs: setup_chrome
+  # Job Test : Exécution des tests Selenium
+  test:
+    needs: ci
     runs-on: ubuntu-latest
     steps:
+      # Checkout du code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Démarrer le serveur Angular
+      # Démarrer le serveur Angular
+      - name: Start Angular server
         run: |
           cd yelp-ea
           npm install
@@ -112,62 +89,48 @@ jobs:
             sleep 5
           done
 
-  # Job pour exécuter les tests Selenium
-  run_selenium_tests:
-    needs: start_angular_server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       # Exécuter les tests Selenium
       - name: Run Selenium tests
         run: |
           cd selenium
           python test_dashboard_restaurateur.py
 
-  # Job pour le teardown des services Docker
-  teardown:
-    needs: [run_tests, run_selenium_tests]
-    runs-on: ubuntu-latest
-    steps:
+      # Teardown : arrêter les services Docker
       - name: Teardown (docker-compose down)
         run: docker-compose down
 
-  # Job pour build et push de l'image Docker du backend
-  build_and_push_backend:
-    needs: teardown
+  # Job CD : Build et Push Docker
+  cd:
+    needs: test
     runs-on: ubuntu-latest
     steps:
+      # Checkout du code
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Se connecter à Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build backend Docker image
+          username: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+
+      # Construire l'image Docker backend
+      - name: Docker build backend
         run: |
           cd yelp-ea-api
-          docker build -t mydockerhub/back:latest .
-      - name: Push backend Docker image
-        run: docker push mydockerhub/back:latest
+          docker build -t back .
 
-  # Job pour build et push de l'image Docker du frontend
-  build_and_push_frontend:
-    needs: teardown
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build frontend Docker image
+      # Pousser l'image Docker vers le registre
+      - name: Docker push backend
+        run: docker push back
+
+      # Construire l'image Docker frontend
+      - name: Docker build frontend
         run: |
           cd yelp-ea
-          docker build -t mydockerhub/front:latest .
-      - name: Push frontend Docker image
-        run: docker push mydockerhub/front:latest
+          docker build -t front .
+
+      # Pousser l'image Docker vers le registre
+      - name: Docker push frontend
+        run: docker push front
