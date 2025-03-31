@@ -1,17 +1,16 @@
 on:
   push:
+    branches: [ "main", "back" ]
   pull_request:
+    branches: [ "main", "back" ]
 
 jobs:
-  ci:
+  setup:
     runs-on: ubuntu-latest
     steps:
-      # Étape de Checkout
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Installer Docker avec une action dédiée
-      - name: Docker install avec action
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
@@ -20,83 +19,80 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           sudo docker --version
-          
-      # Installer Docker Compose via CLI
-      - name: Compose in CLI
-        run: |
-          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-          mkdir -p $DOCKER_CONFIG/cli-plugins
-          curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-          sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
-          
-      # Installer Java 21
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
 
-      # Test Unitaire back
+  build_backend:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build project
+        run: |
+          cd yelp-ea-api
+          mvn clean package -DskipTests
+      - name: Save build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-jar
+          path: yelp-ea-api/target/*.jar
+
+  unit_tests:
+    needs: build_backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Run unit tests
         run: |
           cd yelp-ea-api
-          mvn package
-          
-          # Installer Chrome et ChromeDriver
-      - name: Install Google Chrome & ChromeDriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable chromium-chromedriver
-          google-chrome --version
-          chromedriver --version
-      # Installer les dépendances Python pour Selenium
-      - name: Install Python dependencies for Selenium
-        run: |
-          python -m pip install --upgrade pip
-          pip install selenium webdriver-manager
-      # Vérifier que Chrome et ChromeDriver sont bien installés
-      - name: Verify installations
-        run: |
-          which google-chrome
-          which chromedriver
-          ls -l /usr/bin/chromedriver
-      # Démarrer le serveur Angular
+          mvn test
+
+  angular_server:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Start Angular server
         run: |
           cd yelp-ea
           npm install
           npm run start -- --host 0.0.0.0 --disable-host-check &
-          
-      # Attendre que le serveur Angular soit accessible
       - name: Wait for Angular server to start
         run: |
           until curl -s http://localhost:4200 > /dev/null; do
             echo "Waiting for Angular to start..."
             sleep 5
           done
-      # Exécuter les tests Selenium
+
+  selenium_tests:
+    needs: angular_server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Google Chrome & ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable chromium-chromedriver
+          google-chrome --version
+          chromedriver --version
+      - name: Install Python dependencies for Selenium
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium webdriver-manager
       - name: Run Selenium tests
         run: |
           cd selenium
           python test_dashboard_restaurateur.py
-      # Teardown : arrêter les services Docker
-      - name: Teardown (docker-compose down)
-        run: docker-compose down
-        
-      # Se connecter à Docker
-      #- name: Login to Docker Hub
-      #  uses: docker/login-action@v3
-      #  with:
-      #    username: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-      #    password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-          
-      # Construire l'image Docker
-      #- name: Docker build
-      #  run: |
-      #    cd yelp-ea-api
-      #    docker build -t back .
-
-      # Pousser l'image Docker vers le registre
-      #- name: Docker push
-      #  run: docker push back
