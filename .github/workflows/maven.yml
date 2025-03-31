@@ -42,7 +42,7 @@ jobs:
           cd yelp-ea-api
           mvn clean package -DskipTests
       - name: Save build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-jar
           path: yelp-ea-api/target/*.jar
