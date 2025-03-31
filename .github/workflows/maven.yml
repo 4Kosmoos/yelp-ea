@@ -35,12 +35,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-
       - name: Run unit tests
         run: |
           cd yelp-ea-api
@@ -50,17 +44,15 @@ jobs:
     needs: unit_tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Build project
-        run: |
-          cd yelp-ea-api
-          mvn clean package
-      - name: Save build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-jar
-          path: yelp-ea-api/target/*.jar
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Debug - List files
+      run: ls -la 
+    - name: Build project
+      run: |
+        cd yelp-ea-api
+        mvn clean package
+
 
   angular_server:
     needs: setup
