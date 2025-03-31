@@ -36,24 +36,30 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     steps:
-      # Installer Java 21
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '21'
+    # Vérifier la structure du répertoire
+    - name: List directory structure in unit_tests
+      run: |
+        ls -la
+    
+    # Installer Java 21
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '21'
 
-      # Installer Maven (si nécessaire)
-      - name: Install Maven
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y maven
+    # Installer Maven (si nécessaire)
+    - name: Install Maven
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y maven
 
-      # Exécuter les tests unitaires
-      - name: Run unit tests
-        run: |
-          cd yelp-ea-api
-          mvn package
+    # Exécuter les tests unitaires
+    - name: Run unit tests
+      run: |
+        cd yelp-ea-api
+        mvn package
+
 
 
   # Job des tests Selenium
