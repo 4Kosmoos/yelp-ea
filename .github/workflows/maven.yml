@@ -5,10 +5,10 @@ on:
     branches: [ "main", "back" ]
 
 jobs:
-  ci:
+  # Job pour configurer l'environnement
+  setup_environment:
     runs-on: ubuntu-latest
     steps:
-      # Étape de Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -47,11 +47,27 @@ jobs:
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-${{ runner.os }}-
 
+  # Job pour exécuter les tests unitaires
+  run_tests:
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       # Exécuter les tests unitaires
       - name: Run unit tests
         run: |
           cd yelp-ea-api
           mvn package
+
+  # Job pour installer Chrome et ChromeDriver
+  setup_chrome:
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       # Installer Chrome et ChromeDriver
       - name: Install Google Chrome & ChromeDriver
@@ -74,8 +90,15 @@ jobs:
           which chromedriver
           ls -l /usr/bin/chromedriver
 
-      # Démarrer le serveur Angular
-      - name: Start Angular server
+  # Job pour démarrer le serveur Angular
+  start_angular_server:
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Démarrer le serveur Angular
         run: |
           cd yelp-ea
           npm install
@@ -89,19 +112,31 @@ jobs:
             sleep 5
           done
 
+  # Job pour exécuter les tests Selenium
+  run_selenium_tests:
+    needs: start_angular_server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       # Exécuter les tests Selenium
       - name: Run Selenium tests
         run: |
           cd selenium
           python test_dashboard_restaurateur.py
 
-      # Teardown : arrêter les services Docker
+  # Job pour le teardown des services Docker
+  teardown:
+    needs: [run_tests, run_selenium_tests]
+    runs-on: ubuntu-latest
+    steps:
       - name: Teardown (docker-compose down)
         run: docker-compose down
 
-  # Build et push de l'image Docker backend
+  # Job pour build et push de l'image Docker du backend
   build_and_push_backend:
-    needs: ci
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -118,9 +153,9 @@ jobs:
       - name: Push backend Docker image
         run: docker push mydockerhub/back:latest
 
-  # Build et push de l'image Docker frontend
+  # Job pour build et push de l'image Docker du frontend
   build_and_push_frontend:
-    needs: ci
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
