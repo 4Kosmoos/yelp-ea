@@ -4,6 +4,7 @@ import { RestaurantService } from '../services/restaurant.service';
 import { Restaurant } from '../models/restaurant.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';  // Service pour récupérer l'utilisateur connecté
 
 @Component({
   selector: 'app-dashboard-restaurateur',
@@ -16,15 +17,23 @@ export class DashboardRestaurateurComponent implements OnInit {
   restaurants: Restaurant[] = [];
   isLoading = true;
   showForm = false;
+  ownerId: number = 0;  // ID du restaurateur
 
-  constructor(private restaurantService: RestaurantService, private router: Router) {}
+  constructor(
+    private restaurantService: RestaurantService,
+    private router: Router,
+    private authService: AuthService  // Injecte le service d'authentification
+  ) {}
 
   ngOnInit(): void {
+    // Récupérer l'ID du restaurateur connecté à partir du service d'authentification
+    this.ownerId = this.authService.getCurrentOwnerId(); // Supposons que cette méthode renvoie l'ID du restaurateur connecté
     this.loadRestaurants();
   }
 
   loadRestaurants(): void {
-    this.restaurantService.getRestaurants().subscribe({
+    // Charger les restaurants du restaurateur connecté
+    this.restaurantService.getRestaurantsForOwner(this.ownerId).subscribe({
       next: (data) => {
         this.restaurants = data;
         this.isLoading = false;

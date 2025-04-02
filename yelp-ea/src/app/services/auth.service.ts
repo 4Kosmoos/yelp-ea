@@ -88,4 +88,9 @@ export class AuthService {
     this.currentUserSubject.next(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
+
+  getCurrentOwnerId(): number {
+    // Ici, tu peux récupérer l'ID de l'utilisateur authentifié (par exemple via un token JWT ou autre méthode)
+    return 3;  // Simule un restaurateur avec ID 3 pour l'exemple
+  }
 }
