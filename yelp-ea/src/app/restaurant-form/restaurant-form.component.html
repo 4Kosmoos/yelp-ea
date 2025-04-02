@@ -1,26 +1,20 @@
 <div class="restaurant-list">
   <h3>{{ isEditMode ? 'Modifier un restaurant' : 'Ajouter un restaurant' }}</h3>
   <form (ngSubmit)="onSubmit()">
-    <label for="nom">Nom :</label>
-    <input type="text" id="nom" [(ngModel)]="newRestaurant.name" name="name" required placeholder="Nom du restaurant">
+    <input [(ngModel)]="newRestaurant.name" name="name" placeholder="Nom du restaurant" />
+    <input [(ngModel)]="newRestaurant.address" name="address" placeholder="Adresse" />
+    <input [(ngModel)]="newRestaurant.phone" name="phone" placeholder="Téléphone" />
+    <textarea [(ngModel)]="newRestaurant.description" name="description" placeholder="Description"></textarea>
 
-    <label for="adresse">Adresse :</label>
-    <input type="text" id="adresse" [(ngModel)]="newRestaurant.address" name="address" required placeholder="Ex: 123 Rue Principale">
-
-    <label for="description">Description :</label>
-    <textarea id="description" [(ngModel)]="newRestaurant.description" name="description" required placeholder="Décrivez votre restaurant"></textarea>
-
-    <label for="phone">Téléphone :</label>
-    <input type="text" id="phone" [(ngModel)]="newRestaurant.phone" name="phone" required placeholder="Téléphone du restaurant">
-
-    <label>Catégories :</label>
     <div *ngFor="let category of categories">
       <label>
-        <input type="checkbox" [(ngModel)]="category.selected" [value]="category.name" name="categories" (change)="onCategoryChange(category)">
-        {{ category.name }}
+        <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
+        {{category.name}}
       </label>
     </div>
 
-    <button type="submit" class="submit-btn">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
+    <input [(ngModel)]="newRestaurant.rating" name="rating" type="number" placeholder="Note" />
+
+    <button type="submit">Envoyer</button>
   </form>
 </div>

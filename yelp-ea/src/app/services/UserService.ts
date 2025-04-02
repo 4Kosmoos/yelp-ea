@@ -23,6 +23,14 @@ export class UserService{
     return this.httpClient.delete(`${this.API_URL}/delete/${id}`, { responseType: 'text' });
   }
 
+  addUser(user: User): Observable<User> {
+    return this.httpClient.post<User>(`${this.API_URL}/add`, user);
+  }
+
+  updateUser(id: number, updatedUser: User): Observable<User> {
+    return this.httpClient.put<User>(`${this.API_URL}/update/${id}`, updatedUser);
+  }
+
   addRating(userId: number, restaurantId: number, rating: number): Observable<User> {
     const url = `${this.API_URL}/${userId}/rate/${restaurantId}?rating=${rating}`;
 

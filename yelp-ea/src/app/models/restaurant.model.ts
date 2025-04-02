@@ -6,19 +6,22 @@ export interface Restaurant {
     description: string;
     category: RestaurantCategories[];
     rating: number;
+    noteFromCustomer: number;
   }
 
 export enum RestaurantCategories {
   Chinois = 'Chinois',
-  Libanais = 'Libanais',
+  libanais = 'libanais',
   Thai = 'Thai',
   Vegan = 'Vegan',
   Grec = 'Grec',
   Kebab = 'Kebab',
-  Fast_food = 'Fast food',
-  Japonais = 'Japonais',
-  Italien = 'Italien'
+  Fast_food = 'Fast_food',
+  japonais = 'japonais',
+  italien = 'italien'
 }
+
+
 
 export interface User {
   id: number;

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from '../services/restaurant.service';
-import {FormsModule} from '@angular/forms';
-import {RestaurantCategories} from '../models/restaurant.model';
-import {NgForOf} from '@angular/common'; // Import de l'énumération
+import { FormsModule } from '@angular/forms';
+import { RestaurantCategories } from '../models/restaurant.model';  // Assurez-vous que l'enum est bien importé.
+import { NgForOf } from '@angular/common'; // Import de l'énumération
 
 @Component({
   selector: 'app-restaurant-form',
@@ -21,9 +21,9 @@ export class RestaurantFormComponent implements OnInit {
     rating: 0
   };
 
-  categories = Object.values(RestaurantCategories).map(category => ({
-    name: category,
-    selected: false // par défaut, aucune catégorie sélectionnée
+  categories = Object.keys(RestaurantCategories).map((key) => ({
+    name: key,  // Utilisation des clés de l'énumération comme chaîne
+    selected: false  // par défaut, aucune catégorie sélectionnée
   }));
 
   // Récupérer les catégories sélectionnées
@@ -41,6 +41,7 @@ export class RestaurantFormComponent implements OnInit {
   isEditMode: boolean = false;
   restaurantId: number | null = null;
   errorMessage: string = '';
+  ownerId: number = 3; // ID de l'utilisateur restaurateur, à remplacer par la logique d'authentification
 
   constructor(
     private route: ActivatedRoute,
@@ -60,7 +61,12 @@ export class RestaurantFormComponent implements OnInit {
     this.restaurantService.getRestaurantById(this.restaurantId!).subscribe({
       next: (restaurant: any) => {
         this.newRestaurant = { ...restaurant };
-        // Si nécessaire, vous pouvez manipuler les catégories ici pour les afficher comme sélectionnées
+        // Marquer les catégories comme sélectionnées selon les données du restaurant
+        this.categories.forEach((category) => {
+          if (this.newRestaurant.categories.includes(category.name)) {
+            category.selected = true;
+          }
+        });
       },
       error: (error) => {
         console.error('Erreur lors du chargement du restaurant', error);
@@ -69,7 +75,7 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errorMessage = ''; // Reset erreur avant envoi
+    this.errorMessage = ''; // Réinitialiser les erreurs avant envoi
     if (this.isEditMode) {
       this.updateRestaurant();
     } else {
@@ -78,40 +84,57 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   addRestaurant() {
-    // Envoyer les catégories sélectionnées sous forme de tableau
-    const selectedCategories = this.newRestaurant.categories;
+    console.log('newRestaurant avant envoi :', JSON.stringify(this.newRestaurant, null, 2));
+
+    // Vérifie chaque catégorie et effectue un mapping explicite
+    const mappedCategories = this.newRestaurant.categories.map((cat: string) => {
+      console.log('Catégorie avant mapping :', cat);
+      // Le mapping devient plus simple avec un enum basé sur des chaînes
+      if (Object.values(RestaurantCategories).includes(cat as RestaurantCategories)) {
+        return cat;  // Nous n'avons plus besoin de faire un mapping complexe
+      } else {
+        console.error(`Catégorie invalide : ${cat}`);
+        return null;  // Si la catégorie n'est pas valide, retourner null ou une valeur par défaut
+      }
+    }).filter(Boolean);  // Filtre les valeurs nulles
+
+    console.log('Catégories après mapping :', mappedCategories);
 
     const newRestaurant = {
       name: this.newRestaurant.name,
       address: this.newRestaurant.address,
       phone: this.newRestaurant.phone,
       description: this.newRestaurant.description,
-      category: selectedCategories,  // Tableau des catégories sélectionnées
+      categories: mappedCategories,  // Utilisation des catégories mappées
       rating: this.newRestaurant.rating
     };
 
-    console.log('Données envoyées à l’API :', JSON.stringify(newRestaurant, null, 2));
+    console.log("Données envoyées à l'API : ", JSON.stringify(newRestaurant, null, 2));
 
-    this.restaurantService.addRestaurant(newRestaurant).subscribe({
-      next: () => {
-        this.router.navigate(['/dashboard-restaurateur']);
-      },
+    this.restaurantService.addRestaurantForOwner(this.ownerId, newRestaurant).subscribe({
+      next: () => this.router.navigate(['/dashboard-restaurateur']),
       error: (error) => {
         console.error('Erreur lors de l’ajout du restaurant', error);
         this.errorMessage = "Impossible d'ajouter le restaurant. Vérifie les données.";
+        console.log('Détails de l\'erreur :', error);  // Log des erreurs détaillées
       }
     });
   }
 
+
+
   updateRestaurant() {
-    const selectedCategories = this.newRestaurant.categories;
+    const selectedCategories = this.newRestaurant.categories.map((cat: string) =>
+      RestaurantCategories[cat as keyof typeof RestaurantCategories]  // Conversion des catégories en enum
+    );
 
     const updatedRestaurant = {
       name: this.newRestaurant.name,
       address: this.newRestaurant.address,
       phone: this.newRestaurant.phone,
       description: this.newRestaurant.description,
-      category: selectedCategories,  // Tableau des catégories sélectionnées
+        categories: ['Chinois'],  // Tester avec une catégorie simple
+
       rating: this.newRestaurant.rating
     };
 

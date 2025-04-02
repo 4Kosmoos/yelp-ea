@@ -1,48 +1,53 @@
 import { Injectable } from '@angular/core';
-import {Restaurant, RestaurantCategories} from '../models/restaurant.model';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { Restaurant } from '../models/restaurant.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestaurantService {
-  readonly API_URL = "http://localhost:8080/restaurants"; // URL de base de l'API
+  readonly API_URL = "http://localhost:8080/restaurants";
 
-  constructor(private httpClient: HttpClient) { } // Injection du service HttpClient
+  constructor(private httpClient: HttpClient) { }
 
-  //recupéré tous les restaurants
+  // Récupérer tous les restaurants
   getRestaurants(): Observable<Restaurant[]> {
     return this.httpClient.get<Restaurant[]>(`${this.API_URL}/all`);
   }
 
-  //Récupéré le restaurant via son Id
+  // Récupérer un restaurant par son Id
   getRestaurantById(id: number): Observable<Restaurant> {
     return this.httpClient.get<Restaurant>(`${this.API_URL}/${id}`);
   }
 
-  //Ajouter un restaurant
-  addRestaurant(newRestaurant: any): Observable<any> {
-    return this.httpClient.post(this.API_URL, newRestaurant); // Assure-toi que l
+  // Récupérer les restaurants d'un propriétaire
+  getRestaurantsForOwner(ownerId: number): Observable<Restaurant[]> {
+    return this.httpClient.get<Restaurant[]>(`${this.API_URL}/owner/${ownerId}`);
   }
-  //Modifier un restaurant
+
+  // Ajouter un restaurant pour un propriétaire
+  addRestaurantForOwner(ownerId: number, newRestaurant: any): Observable<any> {
+    return this.httpClient.post(`${this.API_URL}/owner/${ownerId}`, newRestaurant);
+  }
+
+  // Modifier un restaurant
   updateRestaurant(id: number, updatedRestaurant: any): Observable<any> {
-    // On envoie une requête PUT vers l'API pour mettre à jour le restaurant
     return this.httpClient.put(`${this.API_URL}/${id}`, updatedRestaurant);
   }
-  //Supprimer un restaurant
+
+  // Supprimer un restaurant
   deleteRestaurant(id: number): Observable<String> {
     return this.httpClient.delete(`${this.API_URL}/${id}`, { responseType: 'text' });
   }
 
-  rateRestaurant(id: number, rating: number) {
-    return this.httpClient.post(`/${id}/rate`, { rating });
+  // Noter un restaurant
+  rateRestaurant(id: number, rating: number): Observable<any> {
+    return this.httpClient.post(`${this.API_URL}/${id}/rate`, { rating });
   }
 
   // Récupérer les restaurants notés par un utilisateur
   getRestaurantsRatedByUser(userId: number): Observable<Restaurant[]> {
     return this.httpClient.get<Restaurant[]>(`${this.API_URL}/ratedBy/${userId}`);
   }
-
-
 }
