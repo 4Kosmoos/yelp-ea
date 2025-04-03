@@ -1,36 +1,38 @@
-<h2>Liste des utilisateurs</h2>
+<div class="table-container">
+  <h2>Liste des utilisateurs</h2>
 
-<!-- Affichage du chargement -->
-<div *ngIf="isLoading">Chargement des utilisateurs...</div>
+  <!-- Affichage du chargement -->
+  <div *ngIf="isLoading" class="is-loading">Chargement des utilisateurs...</div>
 
-<!-- Affichage des erreurs -->
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <!-- Affichage des erreurs -->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-<!-- Liste des utilisateurs -->
-<table *ngIf="!isLoading && users.length > 0" class="user-table">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Nom</th>
-    <th>Rôle</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let user of users">
-    <td>{{ user.id }}</td>
-    <td>{{ user.login }}</td>
-    <td>{{ user.role }}</td>
-    <td>
-      <button *ngIf="user.role !== UserRole.admin" (click)="deleteUser(user)" class="delete-btn">
-        Supprimer
-      </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <!-- Liste des utilisateurs -->
+  <table *ngIf="!isLoading && users.length > 0" class="user-table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Rôle</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.login }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <button *ngIf="user.role !== UserRole.admin" (click)="deleteUser(user)" class="delete-btn">
+          Supprimer
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
-<!-- Message si aucun utilisateur trouvé -->
-<div *ngIf="!isLoading && users.length === 0">
-  Aucun utilisateur trouvé.
+  <!-- Message si aucun utilisateur trouvé -->
+  <div *ngIf="!isLoading && users.length === 0" class="no-users">
+    Aucun utilisateur trouvé.
+  </div>
 </div>

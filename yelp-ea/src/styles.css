@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+html,body{
+  display: grid;
+  height: 100%;
+  width: 100%;
+  background: #e8e0c8;
+  /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
+}/* You can add global styles to this file, and also import other style files */
