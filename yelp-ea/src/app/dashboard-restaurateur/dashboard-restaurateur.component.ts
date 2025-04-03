@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RestaurantService } from '../services/restaurant.service';
-import { Restaurant } from '../models/restaurant.model';
+import { Restaurant, RestaurantCategories } from '../models/restaurant.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';  // Service pour récupérer l'utilisateur connecté
+import { AuthService } from '../services/auth.service';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-restaurateur',
@@ -17,25 +18,32 @@ export class DashboardRestaurateurComponent implements OnInit {
   restaurants: Restaurant[] = [];
   isLoading = true;
   showForm = false;
-  ownerId: number = 0;  // ID du restaurateur
+  ownerId: number = 0;
 
   constructor(
     private restaurantService: RestaurantService,
     private router: Router,
-    private authService: AuthService  // Injecte le service d'authentification
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Récupérer l'ID du restaurateur connecté à partir du service d'authentification
-    this.ownerId = this.authService.getCurrentOwnerId(); // Supposons que cette méthode renvoie l'ID du restaurateur connecté
+    this.ownerId = this.authService.getCurrentOwnerId();
     this.loadRestaurants();
   }
 
   loadRestaurants(): void {
-    // Charger les restaurants du restaurateur connecté
     this.restaurantService.getRestaurantsForOwner(this.ownerId).subscribe({
       next: (data) => {
-        this.restaurants = data;
+        console.log("Données reçues avant transformation :", JSON.stringify(data, null, 2)); // Debug
+
+        this.restaurants = data.map(restaurant => ({
+          ...restaurant,
+          category: restaurant.categories.map(cat =>
+            RestaurantCategories[cat as keyof typeof RestaurantCategories] || cat
+          )
+        }));
+
+        console.log("Données après transformation :", JSON.stringify(this.restaurants, null, 2)); // Debug
         this.isLoading = false;
       },
       error: (err) => {
@@ -45,12 +53,13 @@ export class DashboardRestaurateurComponent implements OnInit {
     });
   }
 
-  UpdateRestaurant(restaurantId: number): void {
+
+
+  updateRestaurant(restaurantId: number): void {
     console.log('Modification d’un restaurant');
-    this.router.navigate([`/edit/${restaurantId}`])
+    this.router.navigate([`/edit/${restaurantId}`]);
   }
 
-  // Méthode pour supprimer un restaurant
   deleteRestaurant(restaurantId: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce restaurant ?')) {
       this.restaurantService.deleteRestaurant(restaurantId).subscribe({
@@ -68,4 +77,6 @@ export class DashboardRestaurateurComponent implements OnInit {
   toggleForm(): void {
     this.showForm = !this.showForm;
   }
+
+  protected readonly last = last;
 }

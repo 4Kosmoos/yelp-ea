@@ -33,10 +33,17 @@
         <td>{{ restaurant.address }}</td>
         <td>{{ restaurant.description }}</td>
         <td>{{ restaurant.phone }}</td>
-        <td>{{ restaurant.category }}</td>
+        <td>
+          <span *ngFor="let category of restaurant.categories; let last = last">
+            {{ category }}{{ last ? '' : ', ' }}
+          </span>
+        </td>
+
+
+
         <td>
           <!-- Boutons d'action (modifier, supprimer) -->
-          <button class="btn btn-warning btn-sm" (click)="UpdateRestaurant(restaurant.id)">
+          <button class="btn btn-warning btn-sm" (click)="updateRestaurant(restaurant.id)">
             <i class="bi bi-pencil"></i> Modifier
           </button>
           <button class="btn btn-danger btn-sm" (click)="deleteRestaurant(restaurant.id)">
