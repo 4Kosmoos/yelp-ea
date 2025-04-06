@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from '../services/restaurant.service';
 import { FormsModule } from '@angular/forms';
-import { RestaurantCategories } from '../models/restaurant.model';  // Assurez-vous que l'enum est bien importé.
+import { RestaurantCategories, User } from '../models/restaurant.model';
 import { NgForOf } from '@angular/common'; // Import de l'énumération
+import { AuthService } from '../services/auth.service'; // Assurez-vous d'importer votre AuthService
 
 @Component({
   selector: 'app-restaurant-form',
@@ -26,30 +27,33 @@ export class RestaurantFormComponent implements OnInit {
     selected: false  // par défaut, aucune catégorie sélectionnée
   }));
 
-  // Récupérer les catégories sélectionnées
-  onCategoryChange(category: { name: string, selected: boolean }) {
-    if (category.selected) {
-      this.newRestaurant.categories.push(category.name);
-    } else {
-      const index = this.newRestaurant.categories.indexOf(category.name);
-      if (index > -1) {
-        this.newRestaurant.categories.splice(index, 1);
-      }
-    }
-  }
-
   isEditMode: boolean = false;
   restaurantId: number | null = null;
   errorMessage: string = '';
-  ownerId: number = 3; // ID de l'utilisateur restaurateur, à remplacer par la logique d'authentification
+  currentUser: User | null = null; // ID de l'utilisateur restaurateur, à récupérer via AuthService
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private restaurantService: RestaurantService
+    private restaurantService: RestaurantService,
+    private authService: AuthService  // Ajoutez l'AuthService ici
   ) {}
 
   ngOnInit() {
+    // Récupérer l'ID du restaurateur connecté
+    this.authService.getCurrentUserObservable().subscribe({
+      next: (user: User | null) => {
+        if (user && user.role === 'proprietaire') {
+          this.currentUser = user;
+        } else {
+          console.error("Utilisateur non autorisé");
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors de la récupération de l'utilisateur", err);
+      }
+    });
+
     this.restaurantId = this.route.snapshot.paramMap.get('id') ? +this.route.snapshot.paramMap.get('id')! : null;
     if (this.restaurantId) {
       this.isEditMode = true;
@@ -72,6 +76,17 @@ export class RestaurantFormComponent implements OnInit {
         console.error('Erreur lors du chargement du restaurant', error);
       }
     });
+  }
+
+  onCategoryChange(category: { name: string, selected: boolean }) {
+    if (category.selected) {
+      this.newRestaurant.categories.push(category.name);
+    } else {
+      const index = this.newRestaurant.categories.indexOf(category.name);
+      if (index > -1) {
+        this.newRestaurant.categories.splice(index, 1);
+      }
+    }
   }
 
   onSubmit() {
@@ -111,7 +126,7 @@ export class RestaurantFormComponent implements OnInit {
 
     console.log("Données envoyées à l'API : ", JSON.stringify(newRestaurant, null, 2));
 
-    this.restaurantService.addRestaurantForOwner(this.ownerId, newRestaurant).subscribe({
+    this.restaurantService.addRestaurantForOwner(this.currentUser?.id!, newRestaurant).subscribe({
       next: () => this.router.navigate(['/dashboard-restaurateur']),
       error: (error) => {
         console.error('Erreur lors de l’ajout du restaurant', error);
@@ -120,8 +135,6 @@ export class RestaurantFormComponent implements OnInit {
       }
     });
   }
-
-
 
   updateRestaurant() {
     const selectedCategories = this.newRestaurant.categories.map((cat: string) =>
@@ -133,8 +146,7 @@ export class RestaurantFormComponent implements OnInit {
       address: this.newRestaurant.address,
       phone: this.newRestaurant.phone,
       description: this.newRestaurant.description,
-        categories: ['Chinois'],  // Tester avec une catégorie simple
-
+      categories: selectedCategories,  // Assurez-vous que les catégories sont mappées correctement
       rating: this.newRestaurant.rating
     };
 
