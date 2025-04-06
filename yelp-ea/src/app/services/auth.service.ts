@@ -14,8 +14,9 @@ export class AuthService {
   private fakeUsers: User[] = [
     { id: 1, login: 'admin', password: 'adminpass', role: UserRole.admin, notes: new Map(), resto: [] },
     { id: 2, login: 'user', password: 'userpass', role: UserRole.customer, notes: new Map(), resto: [] },
-    { id: 3, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
-    { id: 4, login: 'user2', password: 'user2pass', role: UserRole.customer, notes: new Map(), resto: [] }
+    { id: 3, login: 'user2', password: 'user2pass', role: UserRole.customer, notes: new Map(), resto: [] },
+    { id: 4, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
+    { id: 5, login: 'owner2', password: 'owner2pass', role: UserRole.owner, notes: new Map(), resto: [] }
   ];
 
   constructor(private http: HttpClient) {

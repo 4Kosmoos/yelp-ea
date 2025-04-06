@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RestaurantService } from '../services/restaurant.service';
-import { Restaurant, RestaurantCategories } from '../models/restaurant.model';
+import { Restaurant, RestaurantCategories, User } from '../models/restaurant.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { last } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-restaurateur',
@@ -18,7 +17,7 @@ export class DashboardRestaurateurComponent implements OnInit {
   restaurants: Restaurant[] = [];
   isLoading = true;
   showForm = false;
-  ownerId: number = 0;
+  currentUser: User | null = null;  // Initialisation à null pour éviter les erreurs
 
   constructor(
     private restaurantService: RestaurantService,
@@ -27,23 +26,36 @@ export class DashboardRestaurateurComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ownerId = this.authService.getCurrentOwnerId();
-    this.loadRestaurants();
+    // Récupération de l'utilisateur connecté via l'observable
+    this.authService.getCurrentUserObservable().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        if (this.currentUser) {
+          this.loadRestaurants();  // Charger les restaurants si l'utilisateur est récupéré
+        } else {
+          console.error("Aucun utilisateur connecté");
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors de la récupération de l'utilisateur", err);
+        this.isLoading = false;
+      }
+    });
   }
 
   loadRestaurants(): void {
-    this.restaurantService.getRestaurantsForOwner(this.ownerId).subscribe({
+    if (!this.currentUser) {
+      console.error('Utilisateur non connecté, impossible de charger les restaurants');
+      this.isLoading = false;
+      return;
+    }
+
+    // Appel au service pour récupérer les restaurants du propriétaire connecté
+    this.restaurantService.getRestaurantsForOwner(this.currentUser.id).subscribe({
       next: (data) => {
-        console.log("Données reçues avant transformation :", JSON.stringify(data, null, 2)); // Debug
-
-        this.restaurants = data.map(restaurant => ({
-          ...restaurant,
-          category: restaurant.categories.map(cat =>
-            RestaurantCategories[cat as keyof typeof RestaurantCategories] || cat
-          )
-        }));
-
-        console.log("Données après transformation :", JSON.stringify(this.restaurants, null, 2)); // Debug
+        console.log("Données reçues :", data);
+        this.restaurants = data;
         this.isLoading = false;
       },
       error: (err) => {
@@ -52,8 +64,6 @@ export class DashboardRestaurateurComponent implements OnInit {
       }
     });
   }
-
-
 
   updateRestaurant(restaurantId: number): void {
     console.log('Modification d’un restaurant');
@@ -77,6 +87,4 @@ export class DashboardRestaurateurComponent implements OnInit {
   toggleForm(): void {
     this.showForm = !this.showForm;
   }
-
-  protected readonly last = last;
 }

@@ -26,6 +26,10 @@ export class RestaurantService {
     return this.httpClient.get<Restaurant[]>(`${this.API_URL}/owner/${ownerId}`);
   }
 
+  // Récupérer les restaurants notés par un utilisateur
+  getRestaurantsRatedByUser(userId: number): Observable<Restaurant[]> {
+    return this.httpClient.get<Restaurant[]>(`${this.API_URL}/ratedBy/${userId}`);
+  }
   // Ajouter un restaurant pour un propriétaire
   addRestaurantForOwner(ownerId: number, newRestaurant: any): Observable<any> {
     return this.httpClient.post(`${this.API_URL}/owner/${ownerId}`, newRestaurant);
@@ -44,10 +48,5 @@ export class RestaurantService {
   // Noter un restaurant
   rateRestaurant(id: number, rating: number): Observable<any> {
     return this.httpClient.post(`${this.API_URL}/${id}/rate`, { rating });
-  }
-
-  // Récupérer les restaurants notés par un utilisateur
-  getRestaurantsRatedByUser(userId: number): Observable<Restaurant[]> {
-    return this.httpClient.get<Restaurant[]>(`${this.API_URL}/ratedBy/${userId}`);
   }
 }
