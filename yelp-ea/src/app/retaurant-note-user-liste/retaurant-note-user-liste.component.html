@@ -5,12 +5,12 @@
 </div>
 
 <!-- Message si aucun restaurant n'est trouvé -->
-<div *ngIf="!isLoading && ratedRestaurants && ratedRestaurants.length === 0" class="alert">
+<div *ngIf="!isLoading && restaurants && restaurants.length === 0" class="alert">
   Aucun restaurant trouvé.
 </div>
 
 <!-- Liste des restaurants -->
-<div *ngIf="!isLoading && ratedRestaurants.length > 0" class="restaurant-list">
+<div *ngIf="!isLoading && restaurants.length > 0" class="restaurant-list">
   <h3>Liste des restaurants</h3>
   <table>
     <thead>
@@ -25,13 +25,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let restaurant of ratedRestaurants">
+    <tr *ngFor="let restaurant of restaurants">
       <td>{{ restaurant.name }}</td>
       <td>{{ restaurant.address }}</td>
       <td>{{ restaurant.description }}</td>
       <td>{{ restaurant.phone }}</td>
       <td>{{ restaurant.categories }}</td>
-      <td>{{ restaurant.rating }} ★</td>
+      <td>{{ restaurant.noteFromCustomer }} ★</td>
       <td>
         <button class="rating-btn" (click)="openRatingModal(restaurant)">
           Noter

@@ -12,10 +12,10 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable(); // Observable exposé
 
   private fakeUsers: User[] = [
-    { id: 3, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
+    { id: 1, login: 'admin', password: 'adminpass', role: UserRole.admin, notes: new Map(), resto: [] },
     { id: 2, login: 'user', password: 'userpass', role: UserRole.customer, notes: new Map(), resto: [] },
-    { id: 4, login: 'user2', password: 'user2pass', role: UserRole.customer, notes: new Map(), resto: [] },
-    { id: 1, login: 'admin', password: 'adminpass', role: UserRole.admin, notes: new Map(), resto: [] }
+    { id: 3, login: 'owner', password: 'ownerpass', role: UserRole.owner, notes: new Map(), resto: [] },
+    { id: 4, login: 'user2', password: 'user2pass', role: UserRole.customer, notes: new Map(), resto: [] }
   ];
 
   constructor(private http: HttpClient) {

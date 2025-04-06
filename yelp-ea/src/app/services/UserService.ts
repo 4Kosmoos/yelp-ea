@@ -32,11 +32,9 @@ export class UserService{
   }
 
   addRating(userId: number, restaurantId: number, rating: number): Observable<User> {
+    // Construction de l'URL avec les paramètres path
     const url = `${this.API_URL}/${userId}/rate/${restaurantId}?rating=${rating}`;
-
-    // Si le backend attend un corps (body) avec ces informations, tu peux l'envoyer comme suit
-    const body = { rating };
-
-    return this.httpClient.post<User>(url, body);  // Envoi de rating dans le corps de la requête
+    return this.httpClient.post<User>(url, {});
   }
+
 }
