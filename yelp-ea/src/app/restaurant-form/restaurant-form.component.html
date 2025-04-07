@@ -1,43 +1,45 @@
-<div class="form-container">
-  <h3>{{ isEditMode ? 'Modifier un restaurant' : 'Ajouter un restaurant' }}</h3>
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-layout">
-      <!-- Informations du restaurant -->
-      <div class="form-info">
-        <div class="form-group">
-          <label for="name">Nom du restaurant</label>
-          <input [(ngModel)]="newRestaurant.name" name="name" id="name" placeholder="Nom du restaurant" />
+<div class="form-wrapper">
+  <div class="form-container">
+    <h3>{{ isEditMode ? 'Modifier un restaurant' : 'Ajouter un restaurant' }}</h3>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-layout">
+        <!-- Informations du restaurant -->
+        <div class="form-info">
+          <div class="form-group">
+            <label for="name">Nom du restaurant</label>
+            <input [(ngModel)]="newRestaurant.name" name="name" id="name" placeholder="Nom du restaurant" />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Adresse</label>
+            <input [(ngModel)]="newRestaurant.address" name="address" id="address" placeholder="Adresse" />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input [(ngModel)]="newRestaurant.phone" name="phone" id="phone" placeholder="Téléphone" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="description">Description</label>
+            <textarea [(ngModel)]="newRestaurant.description" name="description" id="description" placeholder="Description" style="height: 175px;"></textarea>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="address">Adresse</label>
-          <input [(ngModel)]="newRestaurant.address" name="address" id="address" placeholder="Adresse" />
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Téléphone</label>
-          <input [(ngModel)]="newRestaurant.phone" name="phone" id="phone" placeholder="Téléphone" />
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea [(ngModel)]="newRestaurant.description" name="description" id="description" placeholder="Description"></textarea>
+        <!-- Catégories -->
+        <div class="form-categories">
+          <h4>Catégories</h4>
+          <div class="categories">
+            <label class="category-label" *ngFor="let category of categories">
+              <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
+              <span class="checkmark"></span>
+              {{ category.name }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- Catégories -->
-      <div class="form-categories">
-        <h4>Catégories</h4>
-        <div class="categories">
-          <label class="category-label" *ngFor="let category of categories">
-            <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
-            <span class="checkmark"></span>
-            {{ category.name }}
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <button type="submit" class="submit-btn">Envoyer</button>
-  </form>
+      <button type="submit" class="submit-btn">Envoyer</button>
+    </form>
+  </div>
 </div>

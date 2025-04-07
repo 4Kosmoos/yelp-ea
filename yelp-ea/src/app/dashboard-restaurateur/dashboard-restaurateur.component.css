@@ -11,60 +11,80 @@
 
 /* Style global du tableau */
 .dashboard-table {
-  width: 100%; /* Le tableau prend toute la largeur disponible */
+  width: 100%;
   border-collapse: collapse;
-  background: #fff; /* Fond blanc pour le tableau */
+  background: #fff;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
+/* Espacement des cellules du tableau */
 .dashboard-table th, .dashboard-table td {
   padding: 15px;
   text-align: left;
   font-size: 16px;
-  color: #1a4146; /* Texte bleu foncé pour le tableau */
+  color: #1a4146;
 }
 
+/* En-têtes */
 .dashboard-table th {
-  background-color: #297272; /* Fond bleu-vert pour l'en-tête */
-  color: #fff; /* Texte blanc pour l'en-tête */
+  background-color: #297272;
+  color: #fff;
   font-weight: 600;
 }
 
+/* Lignes paires avec fond gris */
 .dashboard-table tr:nth-child(even) {
-  background-color: #f7f7f7; /* Fond gris clair pour les lignes paires */
+  background-color: #f7f7f7;
 }
 
+/* Survol de ligne */
 .dashboard-table tr:hover {
-  background-color: #e8e0c8; /* Fond crème clair au survol */
+  background-color: #e8e0c8;
 }
 
+/* Bouton de suppression */
 .delete-btn {
-  background: #d3a446; /* Bouton supprimer couleur dorée */
+  background: #d3a446;
   color: #fff;
   border: none;
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-right: 10px;
 }
 
 .delete-btn:hover {
-  background: #b66d2f; /* Changement de couleur au survol du bouton */
+  background: #b66d2f;
 }
 
+/* Espacement et centrage des boutons d'action */
+.bottom-table-btn {
+  display: flex;
+  justify-content: space-between; /* Espacer les boutons */
+  align-items: center;
+}
+
+.bottom-table-btn button {
+  width: 45%; /* Largeur des boutons */
+}
+
+/* Ajout d'un style pour le bouton "Modifier" */
+.update-btn {
+  background: #297272;
+}
+
+.update-btn:hover {
+  background: #1a4146;
+}
+
+/* Message d'erreur */
 .error-message {
   color: red;
   font-weight: bold;
   margin-top: 20px;
-}
-
-h2 {
-  color: #1a4146;
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
 }
 
 /* Chargement des utilisateurs */
@@ -84,4 +104,21 @@ h2 {
 
 th {
   width: 20%;
+}
+
+.header-table-btn {
+  width: 100px;
+}
+
+h2 {
+  margin-bottom: 2em;
+}
+
+/* Alignement et marges des boutons sous le tableau */
+.bottom-table-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
