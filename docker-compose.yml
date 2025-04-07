@@ -8,10 +8,8 @@ services:
     volumes:
       - biblio-mysql-data:/var/lib/mysql
     environment: 
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: yelp
-      MYSQL_USER: app_user
-      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_PASSWORD: $${{secrets.MYSQL_ROOT_PASSWORD}}
+      MYSQL_DATABASE: $${{secrets.MYSQL_DATABASE}}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -25,9 +23,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/yelp?serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: app_user
-      SPRING_DATASOURCE_PASSWORD: app_password
+      SPRING_DATASOURCE_URL: $${{secrets.SPRING_DATASOURCE_URL}}
+      SPRING_DATASOURCE_USERNAME: $${{secrets.SPRING_DATASOURCE_USERNAME}}
+      SPRING_DATASOURCE_PASSWORD: $${{secrets.SPRING_DATASOURCE_PASSWORD}}	
     depends_on:
       mysqldb:
         condition: service_healthy
