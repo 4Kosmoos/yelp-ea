@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   viewRestaurateurs() {
     console.log('Affichage des restaurateurs');
-    this.router.navigate(['/dashboard-restaurateur']);
+    this.router.navigate(['/allRestaurant']);
   }
 
   // Méthode pour gérer la déconnexion

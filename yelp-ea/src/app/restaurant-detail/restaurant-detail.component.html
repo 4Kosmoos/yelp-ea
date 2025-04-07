@@ -1,1 +1,46 @@
-<p>restaurant-detail works!</p>
+<div class="table-container">
+  <h2>Liste des restaurants</h2>
+
+  <!-- Affichage du chargement -->
+  <div *ngIf="isLoading" class="is-loading">Chargement des restaurants...</div>
+
+  <!-- Affichage des erreurs -->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- Liste des restaurants -->
+  <table *ngIf="!isLoading && restaurants.length > 0" class="restaurant-table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Adresse</th>
+      <th>Description</th>
+      <th>Téléphone</th>
+      <th>Catégorie</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let restaurant of restaurants">
+      <td>{{ restaurant.name }}</td>
+      <td>{{ restaurant.address }}</td>
+      <td>{{ restaurant.description }}</td>
+      <td>{{ restaurant.phone }}</td>
+      <td>
+          <span *ngFor="let category of restaurant.categories; let last = last">
+            {{ category }}{{ last ? '' : ', ' }}
+          </span>
+      </td>
+      <td>
+        <button (click)="deleteRestaurant(restaurant)" class="delete-btn">
+          Supprimer
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Message si aucun restaurant trouvé -->
+  <div *ngIf="!isLoading && restaurants.length === 0" class="no-restaurants">
+    Aucun restaurant trouvé.
+  </div>
+</div>

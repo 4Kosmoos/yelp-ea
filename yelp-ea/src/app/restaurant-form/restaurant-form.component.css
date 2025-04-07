@@ -1,0 +1,134 @@
+/* Conteneur principal */
+.form-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre du formulaire */
+h3 {
+  color: #1a4146;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Mise en page en grille */
+.form-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* Section des informations du restaurant */
+.form-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Groupes de champs de formulaire */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  color: #1a4146;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  color: #1a4146;
+  background-color: #f7f7f7;
+}
+
+input:focus, textarea:focus {
+  border-color: #297272;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+/* Section des catégories */
+.form-categories {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-categories h4 {
+  color: #1a4146;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-label {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #1a4146;
+}
+
+.category-label input {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  accent-color: #297272; /* Couleur accent sur le checkbox */
+  transition: all 0.3s ease;
+}
+
+/* Design du checkbox */
+.category-label input:checked {
+  background-color: #297272;
+  border-color: #297272;
+}
+
+.category-label input:checked + .checkmark {
+  background-color: #297272;
+  border-color: #297272;
+}
+
+/* Bouton de soumission */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #297272;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #1a4146;
+}
+
+/* Style d'erreur */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}

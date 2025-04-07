@@ -1,3 +1,6 @@
+<div class="table-container">
+  <h2>Liste de mes restaurants</h2>
+
 <!-- Affichage du chargement -->
 <div *ngIf="isLoading" class="text-center">
   <div class="spinner-border text-primary" role="status">
@@ -6,18 +9,12 @@
 </div>
 
 <!-- Message si aucun restaurant n'est trouvé -->
-<div *ngIf="!isLoading && restaurants && restaurants.length === 0" class="alert alert-info mt-4">
-  Aucun restaurant trouvé.
-</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-<!-- Affichage de la liste des restaurants -->
-<div *ngIf="!isLoading && restaurants && restaurants.length > 0" class="restaurant-list mt-4">
-  <h3>Liste de mes restaurants</h3>
 
   <!-- Table responsive -->
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead class="thead-dark">
+    <table *ngIf="!isLoading && restaurants && restaurants.length > 0" class="dashboard-table">
+      <thead>
       <tr>
         <th>Nom</th>
         <th>Adresse</th>
@@ -39,19 +36,19 @@
           </span>
         </td>
 
-
-
         <td>
           <!-- Boutons d'action (modifier, supprimer) -->
-          <button class="btn btn-warning btn-sm" (click)="updateRestaurant(restaurant.id)">
-            <i class="bi bi-pencil"></i> Modifier
+          <button class="delete-btn" (click)="updateRestaurant(restaurant.id)">
+            Modifier
           </button>
-          <button class="btn btn-danger btn-sm" (click)="deleteRestaurant(restaurant.id)">
-            <i class="bi bi-trash"></i> Supprimer
+          <button class="delete-btn" (click)="deleteRestaurant(restaurant.id)">
+            Supprimer
           </button>
         </td>
       </tr>
       </tbody>
     </table>
+  <div *ngIf="!isLoading && restaurants.length === 0" class="no-restaurants">
+    Aucun restaurant trouvé.
   </div>
-</div>
+  </div>

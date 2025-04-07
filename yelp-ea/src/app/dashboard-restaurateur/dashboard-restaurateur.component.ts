@@ -18,6 +18,7 @@ export class DashboardRestaurateurComponent implements OnInit {
   isLoading = true;
   showForm = false;
   currentUser: User | null = null;  // Initialisation à null pour éviter les erreurs
+  errorMessage: string | null = null;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -48,6 +49,7 @@ export class DashboardRestaurateurComponent implements OnInit {
     if (!this.currentUser) {
       console.error('Utilisateur non connecté, impossible de charger les restaurants');
       this.isLoading = false;
+      this.errorMessage = null;
       return;
     }
 
@@ -60,6 +62,7 @@ export class DashboardRestaurateurComponent implements OnInit {
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des restaurants", err);
+        this.errorMessage = 'Erreur lors du chargement des utilisateurs.';
         this.isLoading = false;
       }
     });

@@ -1,17 +1,43 @@
-<div class="restaurant-list">
+<div class="form-container">
   <h3>{{ isEditMode ? 'Modifier un restaurant' : 'Ajouter un restaurant' }}</h3>
   <form (ngSubmit)="onSubmit()">
-    <input [(ngModel)]="newRestaurant.name" name="name" placeholder="Nom du restaurant" />
-    <input [(ngModel)]="newRestaurant.address" name="address" placeholder="Adresse" />
-    <input [(ngModel)]="newRestaurant.phone" name="phone" placeholder="Téléphone" />
-    <textarea [(ngModel)]="newRestaurant.description" name="description" placeholder="Description"></textarea>
+    <div class="form-layout">
+      <!-- Informations du restaurant -->
+      <div class="form-info">
+        <div class="form-group">
+          <label for="name">Nom du restaurant</label>
+          <input [(ngModel)]="newRestaurant.name" name="name" id="name" placeholder="Nom du restaurant" />
+        </div>
 
-    <div *ngFor="let category of categories">
-      <label>
-        <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
-        {{category.name}}
-      </label>
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <input [(ngModel)]="newRestaurant.address" name="address" id="address" placeholder="Adresse" />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Téléphone</label>
+          <input [(ngModel)]="newRestaurant.phone" name="phone" id="phone" placeholder="Téléphone" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea [(ngModel)]="newRestaurant.description" name="description" id="description" placeholder="Description"></textarea>
+        </div>
+      </div>
+
+      <!-- Catégories -->
+      <div class="form-categories">
+        <h4>Catégories</h4>
+        <div class="categories">
+          <label class="category-label" *ngFor="let category of categories">
+            <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
+            <span class="checkmark"></span>
+            {{ category.name }}
+          </label>
+        </div>
+      </div>
     </div>
-    <button type="submit">Envoyer</button>
+
+    <button type="submit" class="submit-btn">Envoyer</button>
   </form>
 </div>
