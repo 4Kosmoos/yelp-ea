@@ -111,3 +111,7 @@ jobs:
           docker push ingivre/yelp_ea:yelp-ea-api
           docker push ingivre/yelp_ea:yelp-ea-front
           docker push ingivre/yelp_ea:mysql-8.0
+
+      - name: Deploy with Docker Compose
+        run: docker-compose up -d
+
