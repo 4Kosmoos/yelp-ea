@@ -106,5 +106,8 @@ jobs:
 
 
       # Pousser l'image Docker vers le registre
-      - name: Deploy with Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d
+      - name: Push Docker images
+        run: |
+          docker push ingivre/yelp_ea:yelp-ea-api
+          docker push ingivre/yelp_ea:yelp-ea-front
+          docker push ingivre/yelp_ea:mysql-8.0
