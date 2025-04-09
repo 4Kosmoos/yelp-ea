@@ -95,7 +95,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ingivre
-          password: dckr_pat_k675-lDMy9LyD9oFhDLDeEAnniA
+          password: dckr_pat_X5EtjyGr3pnJXpq-1cJB_0mYYWM
 
       # Construire l'image Docker
       - name: Pull images
