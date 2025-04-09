@@ -1,5 +1,3 @@
-name: CI/CD
-
 on:
   push:
   pull_request:
@@ -7,51 +5,107 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    services:
+      mysqldb:
+        image: ingivre/yelp_ea:mysql-8.0
+        ports:
+          - 3307:3306
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: yelp
+          MYSQL_USER: app_user
+          MYSQL_PASSWORD: app_password
+        options: > 
+          --health-cmd="mysqladmin ping --host=localhost" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
+
+      backend:
+        image: ingivre/yelp_ea:yelp-ea-api
+        ports:
+          - "8080:8080"
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/yelp?serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME: app_user
+          SPRING_DATASOURCE_PASSWORD: app_password
+        options: >
+          --depends-on mysqldb
+
+      frontend:
+        image: ingivre/yelp_ea:yelp-ea-front
+        ports:
+          - "4200:80"
+        options: >
+          --depends-on backend
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Start containers
-        run: docker-compose -f docker-compose.prod.yml up -d
-
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to be ready..."
-          sleep 30
-          curl --fail http://localhost:8080 || exit 1
-
-      - name: Run Selenium tests
-        run: |
-          pip install selenium webdriver-manager
-          cd selenium
-          python test_dashboard_restaurateur.py
-
-      - name: Teardown
-        run: docker-compose -f docker-compose.prod.yml down
-
-  deploy:
-    needs: ci
-    runs-on: ubuntu-latest
-    steps:
+      # Étape de Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Pull images
+      # Installer Docker avec une action dédiée
+      - name: Docker install
         run: |
-          docker pull ingivre/yelp_ea:yelp-ea-api
-          docker pull ingivre/yelp_ea:yelp-ea-front
-          docker pull ingivre/yelp_ea:mysql-8.0
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo docker --version
 
-      - name: Deploy with Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d
+      # Installer Docker Compose via CLI
+      - name: Docker Compose install
+        run: |
+          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+          sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
+          
+      # Démarrer les services avec Docker Compose
+      - name: Start Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d --pull always
+          sleep 10  # Attendre un peu pour que tout soit bien prêt
+
+      # Vérifier que les services sont accessibles
+      - name: Check backend API
+        run: |
+          curl -s http://localhost:8080/actuator/health || exit 1  # Vérifier que l'API backend répond
+
+      - name: Check frontend server
+        run: |
+          curl -s http://localhost:4200 || exit 1  # Vérifier que le frontend est accessible
+
+      # Test Unitaire back
+      - name: Run unit tests
+        run: |
+          cd yelp-ea-api
+          mvn package
+
+      # Installer Chrome et ChromeDriver
+      - name: Install Google Chrome & ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable chromium-chromedriver
+          google-chrome --version
+          chromedriver --version
+
+      # Installer les dépendances Python pour Selenium
+      - name: Install Python dependencies for Selenium
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium webdriver-manager
+
+      # Exécuter les tests Selenium
+      - name: Run Selenium tests
+        run: |
+          cd selenium
+          python test_dashboard_restaurateur.py
+
+      # Teardown : arrêter les services Docker
+      - name: Teardown (docker-compose down)
+        run: |
+          docker-compose down
