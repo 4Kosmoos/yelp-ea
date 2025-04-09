@@ -22,6 +22,7 @@ export class RestaurantListComponent implements OnInit {
   selectedRating: number = 0;
   isModalOpen: boolean = false;
   currentUser: User | null = null;
+  errorMessage: string | null = null;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -45,9 +46,11 @@ export class RestaurantListComponent implements OnInit {
       next: (data) => {
         this.restaurants = data;
         this.isLoading = false;
+        this.errorMessage = null;
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des restaurants", err);
+        this.errorMessage = 'Erreur lors du chargement des utilisateurs.';
         this.isLoading = false;
       }
     });

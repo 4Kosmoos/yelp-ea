@@ -1,18 +1,14 @@
-<!-- Affichage du chargement -->
-<div *ngIf="isLoading" class="loading-container">
-  <div class="spinner"></div>
-  <p>Chargement...</p>
-</div>
+<div class="table-container">
+  <h2>Liste des restaurants</h2>
 
-<!-- Message si aucun restaurant n'est trouvé -->
-<div *ngIf="!isLoading && restaurants && restaurants.length === 0" class="alert">
-  Aucun restaurant trouvé.
-</div>
+<!-- Affichage du chargement -->
+<div *ngIf="isLoading" class="is-loading">Chargement des restaurants...</div>
+
+<!-- Affichage des erreurs -->
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
 <!-- Liste des restaurants -->
-<div *ngIf="!isLoading && restaurants.length > 0" class="restaurant-list">
-  <h3>Liste des restaurants</h3>
-  <table>
+  <table *ngIf="!isLoading && restaurants.length > 0" class="restaurant-table">
     <thead>
     <tr>
       <th>Nom</th>
@@ -30,39 +26,48 @@
       <td>{{ restaurant.address }}</td>
       <td>{{ restaurant.description }}</td>
       <td>{{ restaurant.phone }}</td>
-      <td>{{ restaurant.categories }}</td>
+      <td>
+          <span *ngFor="let category of restaurant.categories; let last = last">
+            {{ category }}{{ last ? '' : ', ' }}
+          </span>
+      </td>
       <td>{{ restaurant.rating }} ★</td>
       <td>
-        <button class="rating-btn" (click)="openRatingModal(restaurant)">
+        <button class="delete-btn" (click)="openRatingModal(restaurant)">
           Noter
         </button>
       </td>
     </tr>
     </tbody>
   </table>
+
+<div *ngIf="!isLoading && restaurants.length === 0" class="no-restaurants">
+  Aucun restaurant trouvé.
 </div>
 
-<!-- Modal de notation -->
-<div class="modal-overlay" *ngIf="isModalOpen">
-  <div class="modal">
-    <div class="modal-header">
-      <h5>Noter {{ selectedRestaurant?.name }}</h5>
-      <button class="close-btn" (click)="closeModal()">✖</button>
-    </div>
-    <div class="modal-body">
-      <p>Attribuez une note :</p>
-      <div class="stars">
+  <!-- Modal de notation -->
+  <div class="modal-overlay" *ngIf="isModalOpen" [ngClass]="{ 'show': isModalOpen }">
+    <div class="modal">
+      <div class="modal-header">
+        <h5>Noter {{ selectedRestaurant?.name }}</h5>
+        <button class="close-btn" (click)="closeModal()">✖</button>
+      </div>
+      <div class="modal-body">
+        <p>Attribuez une note :</p>
+        <div class="stars">
         <span *ngFor="let star of [1,2,3,4,5]"
               class="star"
               [ngClass]="{ 'selected': star <= selectedRating }"
               (click)="selectRating(star)">
           ★
         </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="closeModal()">Annuler</button>
+        <button class="validate-btn" (click)="submitRating()">Valider</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="cancel-btn" (click)="closeModal()">Annuler</button>
-      <button class="validate-btn" (click)="submitRating()">Valider</button>
-    </div>
   </div>
+
 </div>
