@@ -125,10 +125,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Vérifier si Docker Compose est installé
-      - name: Verify Docker Compose installation
-        run: docker-compose --version
-
       # Déployer avec Docker Compose
       - name: Deploy with Docker Compose
         run: docker-compose up -d
