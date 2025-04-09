@@ -110,10 +110,6 @@ jobs:
           docker pull ingivre/yelp_ea:yelp-ea-front
           docker pull ingivre/yelp_ea:mysql-8.0
 
-      # Vérifier si Docker Compose est installé
-      - name: Verify Docker Compose installation
-        run: docker-compose --version
-
       # Pousser l'image Docker vers le registre
       - name: Push Docker images
         run: |
