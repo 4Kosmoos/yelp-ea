@@ -73,6 +73,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium webdriver-manager
 
+      # Lancer Angular localement (si besoin pour test Selenium)
+      - name: Start Angular server
+        run: |
+          cd yelp-ea
+          npm run start -- --host 0.0.0.0 --disable-host-check &
+      
+      - name: Wait for Angular to start
+        run: |
+          until curl -s http://localhost:4200 > /dev/null; do
+            echo "Waiting for Angular to start..."
+            sleep 5
+          done
+          
       # Exécuter Selenium
       - name: Run Selenium tests
         run: |
