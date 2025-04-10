@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main]
+    branches: [main, back]
 
 jobs:
   build-and-push:
