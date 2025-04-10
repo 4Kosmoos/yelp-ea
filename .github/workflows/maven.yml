@@ -76,9 +76,8 @@ jobs:
       # Exécuter Selenium
       - name: Run Selenium tests
         run: |
-          sudo apt-get install -y xvfb
           cd selenium
-          xvfb-run -a python test_dashboard_restaurateur.py
+          python test_dashboard_restaurateur.py
 
       # Nettoyer
       - name: Teardown Docker Compose
