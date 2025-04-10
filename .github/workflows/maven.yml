@@ -111,7 +111,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ingivre
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: dckr_pat_X5EtjyGr3pnJXpq-1cJB_0mYYWM
 
       - name: Pull Docker images
         run: |
