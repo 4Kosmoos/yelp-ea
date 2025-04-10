@@ -60,18 +60,11 @@ jobs:
           sleep 30  # Attendre le démarrage complet
 
       # Installer Chrome & ChromeDriver pour tests Selenium
-      - name: Install Google Chrome and ChromeDriver
+      - name: Install Google Chrome & ChromeDriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip xvfb libxi6 libgconf-2-4
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
-          CHROME_VERSION=$(google-chrome-stable --version | grep -oP '\d+\.\d+\.\d+')
-          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          chmod +x chromedriver
-          sudo mv -f chromedriver /usr/local/bin/chromedriver
+          sudo apt-get install -y google-chrome-stable chromium-chromedriver
+          google-chrome --version
           chromedriver --version
 
       # Installer dépendances Python
