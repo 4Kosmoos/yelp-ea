@@ -26,7 +26,6 @@ jobs:
           curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
-          docker-compose --version
 
       # Java 21
       - name: Set up JDK 21
@@ -41,64 +40,56 @@ jobs:
           cd yelp-ea-api
           mvn clean package
 
-      # Build image backend
+      # Build backend Docker image
       - name: Build backend Docker image
         run: |
           cd yelp-ea-api
           docker build -t ingivre/yelp_ea:yelp-ea-api .
 
-      # Build image frontend
+      # Build frontend Docker image
       - name: Build frontend Docker image
         run: |
           cd yelp-ea
           npm install
           docker build -t ingivre/yelp_ea:yelp-ea-front .
 
-      # Chrome + Selenium
-      - name: Install Google Chrome & ChromeDriver
+      # Lancer les containers avec docker-compose
+      - name: Start Docker Compose services
+        run: |
+          docker-compose up -d
+          sleep 30  # Attendre le démarrage complet
+
+      # Installer Chrome & ChromeDriver pour tests Selenium
+      - name: Install Google Chrome and ChromeDriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable chromium-chromedriver
-          google-chrome --version
+          sudo apt-get install -y unzip xvfb libxi6 libgconf-2-4
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+          CHROME_VERSION=$(google-chrome-stable --version | grep -oP '\d+\.\d+\.\d+')
+          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          chmod +x chromedriver
+          sudo mv -f chromedriver /usr/local/bin/chromedriver
           chromedriver --version
 
+      # Installer dépendances Python
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install selenium webdriver-manager
 
-      # Lancer Angular localement (si besoin pour test Selenium)
-      - name: Start Angular server
-        run: |
-          cd yelp-ea
-          npm run start -- --host 0.0.0.0 --disable-host-check &
-      
-      - name: Wait for Angular to start
-        run: |
-          until curl -s http://localhost:4200 > /dev/null; do
-            echo "Waiting for Angular to start..."
-            sleep 5
-          done
-
+      # Exécuter Selenium
       - name: Run Selenium tests
         run: |
+          sudo apt-get install -y xvfb
           cd selenium
-          python test_dashboard_restaurateur.py
+          xvfb-run -a python test_dashboard_restaurateur.py
 
-      # Login & Push Docker images
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ingivre
-          password: dckr_pat_X5EtjyGr3pnJXpq-1cJB_0mYYWM
-
-      - name: Push Docker images
-        run: |
-          docker push ingivre/yelp_ea:yelp-ea-api
-          docker push ingivre/yelp_ea:yelp-ea-front
-
+      # Nettoyer
       - name: Teardown Docker Compose
-        run: docker-compose down || true
+        run: docker-compose down
 
   cd:
     needs: ci
@@ -113,13 +104,7 @@ jobs:
           username: ingivre
           password: dckr_pat_X5EtjyGr3pnJXpq-1cJB_0mYYWM
 
-      - name: Pull Docker images
-        run: |
-          docker pull ingivre/yelp_ea:yelp-ea-api
-          docker pull ingivre/yelp_ea:yelp-ea-front
-          docker pull ingivre/yelp_ea:mysql-8.0
-
-      - name: Push Docker images (confirm latest)
+      - name: Push Docker images
         run: |
           docker push ingivre/yelp_ea:yelp-ea-api
           docker push ingivre/yelp_ea:yelp-ea-front
@@ -145,10 +130,6 @@ jobs:
           curl -SL https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
           sudo ln -s $DOCKER_CONFIG/cli-plugins/docker-compose /usr/local/bin/docker-compose
-          docker-compose --version
-
-      - name: Verify Docker Compose
-        run: docker-compose --version
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d
