@@ -3,12 +3,10 @@ package com.esiea.yelpeaapi.service;
 import com.esiea.yelpeaapi.UserRole;
 import com.esiea.yelpeaapi.entity.User;
 import com.esiea.yelpeaapi.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
@@ -16,123 +14,176 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.any;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepository repo;
 
     @InjectMocks
     private UserService userService;
 
-    private User testUser;
-
-    @BeforeEach
-    void setUp() {
-        testUser = new User(1, "john_doe", "password123", UserRole.customer, new HashMap<>(), null);
-    }
-
     @Test
     void getAll() {
-        when(userRepository.findAll()).thenReturn(List.of(testUser));
-
+        User user1 = new User(1, "user1", "pass1", UserRole.customer, Map.of(10, 3), null);
+        User user2 = new User(2, "user2", "pass2", UserRole.owner, null, List.of(7, 8));
+        List<User> list = List.of(user1, user2);
+        when(repo.findAll()).thenReturn(list);
         List<User> users = userService.getAll();
 
-        assertEquals(1, users.size());
-        assertEquals(testUser, users.get(0));
-        verify(userRepository, times(1)).findAll();
+        assertEquals(users.getFirst(), list.getFirst());
+        assertEquals(users.getLast(), list.getLast());
+        assertEquals(users.size(), list.size());
+        verify(repo, times(1)).findAll();
     }
 
     @Test
-    void GetOne() {
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+    void getUserById() {
+        User mockedUser = new User(1, "john_doe", "password123", UserRole.owner,  null, List.of(5, 6));
+
+        when(repo.findById(1)).thenReturn(Optional.of(mockedUser));
 
         User user = userService.get(1);
 
         assertNotNull(user);
-        assertEquals(testUser, user);
-        verify(userRepository, times(1)).findById(1);
+        assertEquals(mockedUser.getLogin(), user.getLogin());
+        assertEquals(mockedUser.getPassword(), user.getPassword());
+        assertEquals(mockedUser.getRole(), user.getRole());
+        assertEquals(mockedUser.getResto(), user.getResto());
+        assertEquals(mockedUser.getNotes(), user.getNotes());
+        verify(repo, times(1)).findById(1);
     }
 
     @Test
-    void getUser404() {
-        when(userRepository.findById(1)).thenReturn(Optional.empty());
+    void getUserNotFound() {
+        when(repo.findById(1)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(RuntimeException.class, () -> userService.get(1));
         assertEquals("Utilisateur non trouvé", exception.getMessage());
+        verify(repo, times(1)).findById(1);
     }
 
     @Test
     void add() {
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        User newUser = new User(3, "new_user", "new_pass", UserRole.owner, null, List.of(5, 6));
+        User savedUser = new User(5, "new_user", "new_pass", UserRole.owner, null, List.of(5, 6));
 
-        User user = userService.add(testUser);
+        when(repo.save(newUser)).thenReturn(savedUser);
 
-        assertNotNull(user);
-        assertEquals(testUser, user);
-        verify(userRepository, times(1)).save(testUser);
+        User result = userService.add(newUser);
+
+        assertNotNull(result);
+        assertEquals(savedUser.getId(), result.getId());
+        assertEquals(savedUser.getLogin(), result.getLogin());
+        assertEquals(savedUser.getPassword(), result.getPassword());
+        assertEquals(savedUser.getRole(), result.getRole());
+        assertEquals(savedUser.getResto(), result.getResto());
+        assertEquals(savedUser.getNotes(), result.getNotes());
+        verify(repo, times(1)).save(newUser);
     }
 
     @Test
     void updateUser() {
-        User updatedUser = new User(1, "new_login", "new_password", UserRole.customer, new HashMap<>(), null);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+        User existingUser = new User(1, "old_login", "old_pass", UserRole.owner, null, List.of(5, 6));
+        User updateData = new User();
+        updateData.setLogin("new_login");
+        updateData.setPassword("new_pass");
+        User updatedUser  = new User(1, "new_login", "new_pass", UserRole.owner, null, List.of(5, 6));
 
-        User result = userService.update(1, updatedUser);
+        when(repo.findById(1)).thenReturn(Optional.of(existingUser));
+        when(repo.save(existingUser)).thenReturn(updatedUser);
+
+        User result = userService.update(1, updateData);
 
         assertNotNull(result);
-        assertEquals("new_login", result.getLogin());
-        assertEquals("new_password", result.getPassword());
-        verify(userRepository, times(1)).findById(1);
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals(updateData.getLogin(), result.getLogin());
+        assertEquals(updateData.getPassword(), result.getPassword());
+        verify(repo, times(1)).findById(1);
+        verify(repo, times(1)).save(existingUser);
     }
 
     @Test
-    void updateUser404() {
-        User updatedUser = new User(1, "new_login", "new_password", UserRole.customer, null, null);
-        when(userRepository.findById(1)).thenReturn(Optional.empty());
+    void updateUserNotFound() {
+        when(repo.findById(1)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () -> userService.update(1, updatedUser));
+        User updateData = new User();
+        updateData.setLogin("new_login");
+        updateData.setPassword("new_password");
+
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.update(1, updateData));
         assertEquals("Utilisateur non trouvé", exception.getMessage());
+
+        verify(repo, times(1)).findById(1);
+        verify(repo, never()).save(any(User.class));
     }
 
     @Test
     void deleteUser() {
-        when(userRepository.existsById(1)).thenReturn(true);
-        doNothing().when(userRepository).deleteById(1);
+        int userId = 1;
+        when(repo.existsById(userId)).thenReturn(true);
+        userService.delete(userId);
 
-        assertDoesNotThrow(() -> userService.delete(1));
-        verify(userRepository, times(1)).existsById(1);
-        verify(userRepository, times(1)).deleteById(1);
+        verify(repo, times(1)).existsById(userId);
+        verify(repo, times(1)).deleteById(userId);
     }
 
     @Test
-    void deleteUser404() {
-        when(userRepository.existsById(1)).thenReturn(false);
+    void deleteUserNotFound() {
+        int userId = 1;
+        when(repo.existsById(userId)).thenReturn(false);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> userService.delete(1));
-        assertEquals("Utilisateur non trouvé avec l'ID : 1", exception.getMessage());
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.delete(userId));
+        assertTrue(exception.getMessage().contains("Utilisateur non trouvé avec l'ID : " + userId));
+
+        verify(repo, times(1)).existsById(userId);
+        verify(repo, never()).deleteById(anyInt());
     }
 
     @Test
     void addRating() {
-        User customer = new User(1, "john_doe", "password123", UserRole.customer, null, null);
-        when(userRepository.findById(1)).thenReturn(Optional.of(customer));
+        int userId = 1;
+        int restaurantId = 20;
+        int rating = 5;
 
-        Map<Integer, Integer> updatedNotes = new HashMap<>();
-        updatedNotes.put(10, 8);
+        User customer = new User(userId, "customer", "password", UserRole.customer, null, null);
+        when(repo.findById(userId)).thenReturn(Optional.of(customer));
 
-        User updatedCustomer = new User(1, "john_doe", "password123", UserRole.customer,updatedNotes, null);
-        when(userRepository.save(any(User.class))).thenReturn(updatedCustomer);
+        Map<Integer, Integer> newNotes = new HashMap<>();
+        newNotes.put(restaurantId, rating);
+        customer.setNotes(newNotes);
 
-        User result = userService.addRating(1, 10, 8);
+        when(repo.save(customer)).thenReturn(customer);
+
+        User result = userService.addRating(userId, restaurantId, rating);
+
         assertNotNull(result);
-        assertEquals(8, result.getNotes().get(10));
-        verify(userRepository, times(1)).findById(1);
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals(rating, result.getNotes().get(restaurantId));
+        verify(repo, times(1)).findById(userId);
+        verify(repo, times(1)).save(customer);
+    }
+
+    @Test
+    void addRatingForNonCustomer() {
+        int userId = 2;
+        int restaurantId = 20;
+        int rating = 5;
+        User owner = new User(userId, "owner", "pass", UserRole.owner, null, List.of(1,2));
+        when(repo.findById(userId)).thenReturn(Optional.of(owner));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.addRating(userId, restaurantId, rating));
+        assertTrue(exception.getMessage().contains("Seul un utilisateur de type CUSTOMER"));
+        verify(repo, times(1)).findById(userId);
+        verify(repo, never()).save(any());
     }
 }

@@ -4,7 +4,6 @@ import com.esiea.yelpeaapi.RestaurantCategories;
 import com.esiea.yelpeaapi.entity.Restaurant;
 import com.esiea.yelpeaapi.service.RestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
