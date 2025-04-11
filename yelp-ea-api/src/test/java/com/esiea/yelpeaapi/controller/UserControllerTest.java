@@ -150,24 +150,22 @@ class UserControllerTest {
 
     @Test
     void deleteUser() throws Exception {
-
-        int userId = 8;
-        mockMvc.perform(delete("/users/delete/{id}", userId))
+        mockMvc.perform(delete("/users/delete/8"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Utilisateur supprimé avec succès !"));
-        verify(userService, times(1)).delete(userId);
+        verify(userService, times(1)).delete(8);
     }
 
 
     @Test
     void rateRestaurant() throws Exception {
-        int userId = 8;
+        int userId = 9;
         int restaurantId = 10;
         int rating = 4;
         User mockedFinalUser = new User(userId, "john_doe", "password123", UserRole.customer, Map.of(restaurantId, rating), null);
         when(userService.addRating(userId, restaurantId, rating)).thenReturn(mockedFinalUser);
 
-        mockMvc.perform(post("/users/{userId}/rate/{restaurantId}", userId, restaurantId)
+        mockMvc.perform(post("/users/9/rate/10")
                 .param("rating", String.valueOf(rating))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
