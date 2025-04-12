@@ -4,14 +4,14 @@ services:
   mysqldb:
     image: ingivre/yelp_ea:mysql-8.0
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - biblio-mysql-data:/var/lib/mysql
     environment: 
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: yelp
-      MYSQL_USER: app_user
-      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_PASSWORD: $${{secrets.MYSQL_ROOT_PASSWORD}}
+      MYSQL_DATABASE: $${{secrets.MYSQL_DATABASE}}
+      MYSQL_USER: $${{secrets.MYSQL_USER}}
+      MYSQL_PASSWORD: $${{secrets.MYSQL_PASSWORD}}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -19,13 +19,15 @@ services:
       retries: 5
 
   backend:
-    image: ingivre/yelp_ea:yelp-ea-api
+    image: yelp-ea-api
+    build:
+      context: ./yelp-ea-api
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/yelp?serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: app_user
-      SPRING_DATASOURCE_PASSWORD: app_password
+      SPRING_DATASOURCE_URL: $${{secrets.SPRING_DATASOURCE_URL}}
+      SPRING_DATASOURCE_USERNAME: $${{secrets.SPRING_DATASOURCE_USERNAME}}
+      SPRING_DATASOURCE_PASSWORD: $${{secrets.SPRING_DATASOURCE_PASSWORD}}
     depends_on:
       mysqldb:
         condition: service_healthy
@@ -49,7 +51,9 @@ services:
         condition: service_started
 
   frontend:
-    image: ingivre/yelp_ea:yelp-ea-front
+    image: yelp-ea-front
+    build:
+      context: ./yelp-ea
     ports:
       - "4200:80"
     depends_on:
