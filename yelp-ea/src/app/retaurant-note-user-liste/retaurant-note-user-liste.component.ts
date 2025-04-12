@@ -25,6 +25,7 @@ export class RetaurantNoteUserListeComponent implements OnInit {
   selectedRating: number = 0;
   isModalOpen: boolean = false;
   currentUser: User | null = null;
+  errorMessage: string = '';
 
   constructor(
     private restaurantService: RestaurantService,
@@ -49,6 +50,7 @@ export class RetaurantNoteUserListeComponent implements OnInit {
         },
         error: (err) => {
           console.error("Erreur lors de la récupération des restaurants", err);
+          this.errorMessage = "Erreur de chargement des restaurants.";
           this.isLoading = false;
         }
       });
@@ -88,6 +90,7 @@ export class RetaurantNoteUserListeComponent implements OnInit {
       });
     } else {
       console.error("Utilisateur non connecté ou restaurant non sélectionné.");
+      this.errorMessage = "Erreur de suppression du restaurant.";
     }
   }
 

@@ -1,137 +1,209 @@
-/* Styles de base */
-.loading-container {
-  text-align: center;
+/* Conteneur principal */
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 75vh;
+  width: 100%;
   padding: 20px;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 5px solid #ccc;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 10px auto;
+/* Style global du tableau */
+.restaurant-table {
+  width: 100%; /* Le tableau prend toute la largeur disponible */
+  border-collapse: collapse;
+  background: #fff; /* Fond blanc pour le tableau */
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.restaurant-table th, .restaurant-table td {
+  padding: 15px;
+  text-align: left;
+  font-size: 16px;
+  color: #1a4146; /* Texte bleu foncé pour le tableau */
 }
 
-.alert {
-  padding: 10px;
-  background-color: #f8d7da;
-  color: #721c24;
-  text-align: center;
+.restaurant-table th {
+  background-color: #297272; /* Fond bleu-vert pour l'en-tête */
+  color: #fff; /* Texte blanc pour l'en-tête */
+  font-weight: 600;
+}
+
+.restaurant-table tr:nth-child(even) {
+  background-color: #f7f7f7; /* Fond gris clair pour les lignes paires */
+}
+
+.restaurant-table tr:hover {
+  background-color: #e8e0c8; /* Fond crème clair au survol */
+}
+
+.delete-btn {
+  background: #d3a446; /* Bouton supprimer couleur dorée */
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
   border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #b66d2f; /* Changement de couleur au survol du bouton */
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
   margin-top: 20px;
 }
 
-.restaurant-list {
-  margin: 20px;
+h2 {
+  color: #1a4146;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+/* Chargement des utilisateurs */
+.is-loading {
+  font-size: 18px;
+  color: #297272;
+  text-align: center;
+  font-weight: 500;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
+/* Aucun utilisateur trouvé */
+.no-users {
+  font-size: 18px;
+  color: #999;
   text-align: center;
 }
 
 th {
-  background-color: #4CAF50;
-  color: white;
+  width: 20%;
 }
 
-.rating-btn {
-  background-color: #f39c12;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.rating-btn:hover {
-  background-color: #e67e22;
-}
-
-/* Modal */
+/* Overlay de la modal */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Fond semi-transparent */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Assurer que la popup soit au-dessus */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
 }
 
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Conteneur de la modal */
 .modal {
-  background: white;
-  padding: 20px;
+  background-color: #fff;
   border-radius: 10px;
-  width: 300px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Header de la modal */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 18px;
+  color: #1a4146;
+}
+
+.modal-header h5 {
+  font-size: 20px;
+  color: #297272;
 }
 
 .close-btn {
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 20px;
+  color: #1a4146;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #b66d2f; /* Changer la couleur au survol */
+}
+
+/* Corps de la modal */
+.modal-body {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #1a4146;
 }
 
 .stars {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
-}
-
-.star {
-  font-size: 24px;
-  cursor: pointer;
-  color: #ccc;
-}
-
-.star.selected {
-  color: gold;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
   margin-top: 10px;
 }
 
-.cancel-btn {
-  background-color: #e74c3c;
-  color: white;
-  padding: 5px 10px;
+.star {
+  font-size: 30px;
+  color: #297272;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.star.selected {
+  color: #d3a446; /* Couleur pour les étoiles sélectionnées */
+}
+
+.star:hover {
+  color: #b66d2f; /* Changer la couleur au survol */
+}
+
+/* Footer de la modal */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Boutons de la modal */
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
+  font-size: 16px;
+}
+
+.cancel-btn {
+  background-color: #f7f7f7;
+  color: #1a4146;
+  transition: background 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #e8e0c8;
 }
 
 .validate-btn {
-  background-color: #2ecc71;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
+  background-color: #297272;
+  color: #fff;
+  transition: background 0.3s ease;
 }
 
+.validate-btn:hover {
+  background-color: #1a4146;
+}
