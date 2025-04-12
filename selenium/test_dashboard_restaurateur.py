@@ -46,9 +46,10 @@ try:
 
     # Vérifier si la page du dashboard restaurateur est bien affichée
     try:
-        restaurants_table = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "table.dashboard-table"))
-        )
+        # restaurants_table = WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.CSS_SELECTOR, "table.dashboard-table"))
+        # )
+        restaurants_table = driver.find_element(By.CSS_SELECTOR, "table.dashboard-table")
         print("Table des restaurants trouvée")
 
         rows = restaurants_table.find_elements(By.TAG_NAME, "tr")
