@@ -47,7 +47,7 @@ try:
     # Vérifier si la page du dashboard restaurateur est bien affichée
     try:
         # Vérifier si la table des restaurants est visible sur la page du dashboard restaurateur
-        restaurants_table = driver.find_element(By.CSS_SELECTOR, "table.table")
+        restaurants_table = driver.find_element(By.CSS_SELECTOR, "table.dashboard-table")
         print("Table des restaurants trouvée")
 
         rows = restaurants_table.find_elements(By.TAG_NAME, "tr")
