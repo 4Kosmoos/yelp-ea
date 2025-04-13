@@ -99,16 +99,8 @@ jobs:
           username: ingivre
           password: ${{secrets.DOCKER_EMELINE_PASSWORD}}
   
-      # Construire l'image Docker
-      - name: Build Docker images
+      # Compose Docker
+      - name: Construire et déployer avec Docker Compose
         run: |
-          docker build -t ./yelp_ea/yelp-ea-api
-          docker build -t ./yelp_ea/yelp-ea-front
-          docker build -t ./yelp_ea:mysql-8.0 ./mysql
-        
-      # Pousser l'image Docker vers le registre
-      - name: Push Docker images
-        run: |
-          docker push ingivre/yelp_ea:yelp-ea-api
-          docker push ingivre/yelp_ea:yelp-ea-front
-          docker push ingivre/yelp_ea:mysql-8.0
+          docker-compose build
+          docker-compose up -d
