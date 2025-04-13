@@ -99,18 +99,16 @@ jobs:
           username: ingivre
           password: ${{secrets.DOCKER_EMELINE_PASSWORD}}
   
-      - name: Installer Docker Compose
-        run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      # Compose Docker
-      - name: Construire et déployer avec Docker Compose
+      # Construire l'image Docker
+      - name: Pull images
         run: |
-          docker-compose up -d
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          docker pull ingivre/yelp_ea:yelp-ea-api
+          docker pull ingivre/yelp_ea:yelp-ea-front
+          docker pull ingivre/yelp_ea:mysql-8.0
+          
+      # Pousser l'image Docker vers le registre
+      - name: Push Docker images
+        run: |
+          docker push ingivre/yelp_ea:yelp-ea-api
+          docker push ingivre/yelp_ea:yelp-ea-front
+          docker push ingivre/yelp_ea:mysql-8.0
