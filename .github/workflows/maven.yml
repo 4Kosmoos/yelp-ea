@@ -78,7 +78,7 @@ jobs:
       - name: Run Selenium tests
         run: |
           cd selenium
-          python test_dashboard_restaurateur.py
+          python test_dashboard_restaurateur.py --headless --no-sandbox --disable-dev-shm-usage
         
       - name: Teardown
         run: docker-compose down
