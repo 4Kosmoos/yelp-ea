@@ -78,6 +78,8 @@ try:
     except:
         print("⚠️ Spinner non trouvé ou toujours visible — vérifie l'affichage.")
 
+    print(f"📍 URL actuelle après chargement : {driver.current_url}")
+
     # Vérification du restaurant ajouté
     resto_present = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located(
