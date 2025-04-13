@@ -14,20 +14,25 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
+print("🚀 Lancement du test Selenium avec login...")
+
 # Créer un répertoire temporaire unique pour le profil Chrome
 temp_profile_dir = tempfile.mkdtemp()
 
 # Configuration des options Chrome
 chrome_options = Options()
-chrome_options.add_argument("--headless")  # Mode sans interface graphique
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--window-size=1920x1080")
 chrome_options.add_argument(f"--user-data-dir={temp_profile_dir}")
 
 # Initialisation du driver
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
-test_success = False  # Flag pour savoir si le test est OK
+test_success = False
 
 try:
     # 🔐 Connexion
@@ -40,7 +45,7 @@ try:
     password_field.send_keys("ownerpass")
     password_field.send_keys(Keys.RETURN)
 
-    # 🕒 Attendre que la redirection et le DOM soient prêts
+    # ⏳ Attente de la redirection vers le dashboard
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "table.dashboard-table"))
     )
@@ -68,6 +73,5 @@ finally:
 
 print("🧹 Test terminé et nettoyage effectué.")
 
-# 🔥 Si test pas OK, on sort avec une erreur
 if not test_success:
     sys.exit(1)
