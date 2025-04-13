@@ -105,7 +105,6 @@ jobs:
       # Compose Docker
       - name: Construire et déployer avec Docker Compose
         run: |
-          docker-compose build
           docker-compose up -d
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
