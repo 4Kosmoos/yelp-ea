@@ -57,11 +57,23 @@ jobs:
             sleep 5
           done
   
-      - name: Run Selenium login + dashboard test
+      - name: Install dependencies for headless Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libatk-bridge2.0-0 libx11-xcb1
+      
+      # Vérifier les versions de Chrome et ChromeDriver
+      - name: Check Chrome and ChromeDriver versions
+        run: |
+          google-chrome --version
+          chromedriver --version
+      
+      # Exécuter les tests Selenium
+      - name: Run Selenium tests
         run: |
           cd selenium
           python test_dashboard_restaurateur.py
-  
+        
       - name: Teardown
         run: docker-compose down
 
