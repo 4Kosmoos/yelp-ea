@@ -16,7 +16,7 @@ try:
     print("🚀 Lancement du test Selenium avec login...")
     driver.get("http://localhost:4200")
 
-    # Attendre que le champ login soit présent
+    # Attente du champ de login
     print("⏳ Attente du champ de login...")
     WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.ID, "login"))
@@ -29,17 +29,41 @@ try:
 
     # Soumettre le formulaire
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
-
     print("📤 Formulaire soumis.")
 
-    # Attendre une redirection ou un élément spécifique après login ?
-    # WebDriverWait(driver, 10).until(...)  <-- À adapter si besoin
+    # Attente de redirection vers la page restaurant
+    print("⏳ Attente de redirection vers la page des restaurants...")
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.TAG_NAME, "h2"))
+    )
+    assert "Liste de mes restaurants" in driver.page_source
+    print("✅ Redirection vers la page de restaurants détectée.")
+
+    # Attendre que le spinner disparaisse
+    print("⏳ Attente que le chargement se termine...")
+    WebDriverWait(driver, 15).until_not(
+        EC.presence_of_element_located((By.CLASS_NAME, "spinner-border"))
+    )
+    print("✅ Chargement terminé.")
+
+    # Vérifier la table ou le message d'absence
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "table.dashboard-table tbody tr"))
+        )
+        print("✅ Table de restaurants détectée.")
+    except:
+        print("❗ Table non détectée, vérification du message d'absence...")
+        msg = driver.find_element(By.CLASS_NAME, "no-restaurants").text
+        assert "Aucun restaurant trouvé" in msg
+        print("✅ Message 'Aucun restaurant trouvé' détecté.")
 
 except Exception as e:
-    print(f"❌ Erreur lors du test de la page: {e}")
+    print(f"❌ Erreur lors du test : {e}")
     with open("page_dump.html", "w", encoding="utf-8") as f:
         f.write(driver.page_source)
     raise
+
 finally:
     driver.quit()
     print("🧹 Test terminé et nettoyage effectué.")
