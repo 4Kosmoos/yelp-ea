@@ -7,7 +7,7 @@ from selenium.webdriver.common.alert import Alert
 
 # Setup Chrome
 options = Options()
-# options.add_argument("--headless")  # Pour exécuter Chrome en mode sans tête
+options.add_argument("--headless")  # Pour exécuter Chrome en mode sans tête
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-notifications")  # Désactive les notifications
