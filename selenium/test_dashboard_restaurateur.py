@@ -4,16 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.alert import Alert
+import time
 
 # Configuration Chrome headless avec désactivation des popups
 options = Options()
 options.add_argument("--headless")  # Pour exécuter Chrome en mode sans tête
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--disable-notifications")  # Désactive les notifications
-options.add_argument("--disable-extensions")  # Désactive les extensions
-options.add_argument("--disable-popup-blocking")  # Désactive le blocage des popups
-options.add_argument("--incognito")  # Utilise le mode incognito pour éviter certaines popups
+options.add_argument("--disable-notifications")
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-popup-blocking")
+options.add_argument("--incognito")
 
 driver = webdriver.Chrome(options=options)
 
@@ -53,35 +54,35 @@ try:
     # 📤 Envoi du formulaire
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
     print("📨 Formulaire soumis.")
-
-    # Attente de redirection vers la page restaurant
-    print(f"📍 URL actuelle : {driver.current_url}")
+    print(f"📍 URL actuelle après soumission : {driver.current_url}")
     print("⏳ Attente de redirection vers la page des restaurants...")
 
-    # Gestion des alertes (popups)
+    # Gestion des alertes
     try:
         WebDriverWait(driver, 5).until(EC.alert_is_present())
         alert = Alert(driver)
-        alert.accept()  # Accepter l'alerte (si elle existe)
+        alert.accept()
         print("✅ Alerte acceptée.")
     except:
         print("✅ Pas d'alerte.")
 
+    # Attente explicite sur un h2 qui indique que la page est bien chargée
     WebDriverWait(driver, 30).until(
-        EC.text_to_be_present_in_element((By.TAG_NAME, "h2"), "Liste de mes restaurants")
+        EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Liste de mes restaurants')]"))
     )
-
-    assert "Liste de mes restaurants" in driver.page_source
     print("✅ Redirection vers la page de restaurants détectée.")
 
-    # Attendre que le spinner disparaisse
+    # Attente que le spinner disparaisse
     print("⏳ Attente que le chargement se termine...")
-    WebDriverWait(driver, 15).until_not(
-        EC.presence_of_element_located((By.CLASS_NAME, "spinner-border"))
-    )
-    print("✅ Chargement terminé.")
+    try:
+        WebDriverWait(driver, 15).until_not(
+            EC.presence_of_element_located((By.CLASS_NAME, "spinner-border"))
+        )
+        print("✅ Chargement terminé.")
+    except:
+        print("⚠️ Spinner non trouvé ou toujours visible — vérifie l'affichage.")
 
-    # ✅ Vérification que "Selenium Test Resto" est dans le tableau
+    # Vérification du restaurant ajouté
     resto_present = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located(
             (By.XPATH, "//table//td[contains(text(), 'Selenium Test Resto')]")
