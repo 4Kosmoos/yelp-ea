@@ -102,9 +102,9 @@ jobs:
       # Construire l'image Docker
       - name: Build Docker images
         run: |
-          docker build -t ingivre/yelp_ea:yelp-ea-api ./yelp-ea-api
-          docker build -t ingivre/yelp_ea:yelp-ea-front ./yelp-ea
-          docker build -t ingivre/yelp_ea:mysql-8.0 ./mysql
+          docker build -t ./yelp_ea/yelp-ea-api
+          docker build -t ./yelp_ea/yelp-ea-front
+          docker build -t ./yelp_ea:mysql-8.0 ./mysql
         
       # Pousser l'image Docker vers le registre
       - name: Push Docker images
