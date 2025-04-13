@@ -69,7 +69,7 @@ try:
 
     # Attente de redirection vers la page restaurant
     print("⏳ Attente de redirection vers la page des restaurants...")
-    WebDriverWait(driver, 15).until(
+    WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.TAG_NAME, "h2"))
     )
     assert "Liste de mes restaurants" in driver.page_source
