@@ -14,14 +14,22 @@ public class Restaurant {
     private int id;
     private String name;
     private String address;
+
+    @Column(nullable = true)
     private String phone;
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "restaurant_categories", joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Column(name = "category", nullable = true)
     @Enumerated(EnumType.STRING)
     private List<RestaurantCategories> categories;
-    private float rating;
+
+    @Transient
+    private double rating;
+
+    @Transient
+    private int noteFromCustomer;
 
     public int getId() {
         return id;
@@ -71,11 +79,11 @@ public class Restaurant {
         this.categories = categories;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -89,6 +97,24 @@ public class Restaurant {
         this.description = description;
         this.categories = categories;
         this.rating = rating;
+    }
+    public Restaurant(int id, String name, String address, String phone, String description, List<RestaurantCategories> categories, float rating, int noteFromCustomer) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.description = description;
+        this.categories = categories;
+        this.rating = rating;
+        this.noteFromCustomer = noteFromCustomer;
+    }
+
+    public int getNoteFromCustomer() {
+        return noteFromCustomer;
+    }
+
+    public void setNoteFromCustomer(int noteFromCustomer) {
+        this.noteFromCustomer = noteFromCustomer;
     }
 }
 

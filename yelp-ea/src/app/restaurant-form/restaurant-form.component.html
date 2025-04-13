@@ -1,29 +1,45 @@
-<p>restaurant-form works!</p>
-<!--   
-    <div *ngIf="restaurants.length > 0" class="restaurant-list">
-        <h3>Ajouter un restaurant</h3>
-      <form (ngSubmit)="addRestaurant()">
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" [(ngModel)]="newRestaurant.nom" name="nom" required placeholder="Nom du restaurant">
-  
-        <label for="adresse">Adresse :</label>
-        <input type="text" id="adresse" [(ngModel)]="newRestaurant.adresse" name="adresse" required placeholder="Ex: 123 Rue Principale">
-  
-        <label for="description">Description :</label>
-        <textarea id="description" [(ngModel)]="newRestaurant.description" name="description" required placeholder="Décrivez votre restaurant"></textarea>
-  
-        <label for="categorie">Catégorie :</label>
-        <select id="categorie" [(ngModel)]="newRestaurant.categorie" name="categorie">
-          <option>Autre</option>
-          <option>Fast Food</option>
-          <option>Italien</option>
-          <option>Japonais</option>
-          <option>Indien</option>
-        </select>
-  
-        <label for="coordonnees">Coordonnées :</label>
-        <input type="text" id="coordonnees" [(ngModel)]="newRestaurant.coordonnees" name="coordonnees" placeholder="Ex: 48.8566, 2.3522">
-  
-        <button type="submit" class="submit-btn">Ajouter</button>
-      </form>
-    </div>-->
+<div class="form-wrapper">
+  <div class="form-container">
+    <h3>{{ isEditMode ? 'Modifier un restaurant' : 'Ajouter un restaurant' }}</h3>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-layout">
+        <!-- Informations du restaurant -->
+        <div class="form-info">
+          <div class="form-group">
+            <label for="name">Nom du restaurant</label>
+            <input [(ngModel)]="newRestaurant.name" name="name" id="name" placeholder="Nom du restaurant" />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Adresse</label>
+            <input [(ngModel)]="newRestaurant.address" name="address" id="address" placeholder="Adresse" />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input [(ngModel)]="newRestaurant.phone" name="phone" id="phone" placeholder="Téléphone" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="description">Description</label>
+            <textarea [(ngModel)]="newRestaurant.description" name="description" id="description" placeholder="Description" style="height: 175px;"></textarea>
+          </div>
+        </div>
+
+        <!-- Catégories -->
+        <div class="form-categories">
+          <h4>Catégories</h4>
+          <div class="categories">
+            <label class="category-label" *ngFor="let category of categories">
+              <input type="checkbox" [(ngModel)]="category.selected" name="category-{{category.name}}" (change)="onCategoryChange(category)" />
+              <span class="checkmark"></span>
+              {{ category.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Envoyer</button>
+    </form>
+  </div>
+</div>

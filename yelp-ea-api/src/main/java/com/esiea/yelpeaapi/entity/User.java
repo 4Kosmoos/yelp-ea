@@ -1,17 +1,25 @@
 package com.esiea.yelpeaapi.entity;
 
 import com.esiea.yelpeaapi.UserRole;
+import jakarta.persistence.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+    @ElementCollection
     private Map<Integer, Integer> notes;
+    @ElementCollection
     private List<Integer> resto;
 
     public int getId() {

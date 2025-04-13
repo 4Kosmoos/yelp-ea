@@ -1,21 +1,28 @@
 <header class="app-header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <!-- Menu pour restaurateur -->
-      <div *ngIf="userRole === 'restaurateur'" class="nav-items">
-        <button class="btn btn-primary" (click)="viewRestaurants()">Voir mes restaurants</button>
-        <button class="btn btn-success" (click)="addRestaurant()">Ajouter un restaurant</button>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <!-- Menu pour Restaurateur -->
+      <div *ngIf="userRole === UserRole.owner" class="nav-items">
+        <button class="btn-custom" (click)="viewRestaurants()">Voir mes restaurants</button>
+        <button class="btn-custom" (click)="addRestaurant()">Ajouter un restaurant</button>
       </div>
 
-      <!-- Menu pour utilisateur classique -->
-      <div *ngIf="userRole === 'utilisateur'" class="nav-items">
-        <button class="btn btn-info" (click)="viewAllRestaurants()">Voir tous les restaurants</button>
-        <button class="btn btn-secondary" (click)="otherPage()">Autre page</button>
+      <!-- Menu pour Utilisateur classique -->
+      <div *ngIf="userRole === UserRole.customer" class="nav-items">
+        <button class="btn-custom" (click)="viewAllRestaurants()">Voir tous les restaurants</button>
+        <button class="btn-custom" (click)="ListeRestoNotePage()">Voir les restaurants déjà notés</button>
       </div>
 
-      <!-- Menu pour admin -->
-      <div *ngIf="userRole === 'admin'" class="nav-items">
-        <button class="btn btn-warning" (click)="viewUsers()">Voir les utilisateurs</button>
-        <button class="btn btn-danger" (click)="viewRestaurateurs()">Voir les restaurateurs</button>
+      <!-- Menu pour Admin -->
+      <div *ngIf="userRole === UserRole.admin" class="nav-items">
+        <button class="btn-custom" (click)="viewUsers()">Voir les utilisateurs</button>
+        <button class="btn-custom" (click)="viewRestaurateurs()">Voir les restaurants</button>
       </div>
-    </nav>
-  </header>
+
+      <!-- Bouton de déconnexion aligné à droite -->
+      <div class="nav-items logout-btn">
+        <button class="btn-danger" (click)="logout()">Déconnexion</button>
+      </div>
+    </div>
+  </nav>
+</header>

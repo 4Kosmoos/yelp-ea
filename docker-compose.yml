@@ -10,6 +10,8 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: $${{secrets.MYSQL_ROOT_PASSWORD}}
       MYSQL_DATABASE: $${{secrets.MYSQL_DATABASE}}
+      MYSQL_USER: $${{secrets.MYSQL_USER}}
+      MYSQL_PASSWORD: $${{secrets.MYSQL_PASSWORD}}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -18,6 +20,8 @@ services:
 
   backend:
     image: yelp-ea-api
+    build:
+      context: ./yelp-ea-api
     ports:
       - "8080:8080"
     environment:
@@ -28,13 +32,32 @@ services:
       mysqldb:
         condition: service_healthy
 
+  db-seed:
+    image: mysql:8.0
+    volumes:
+      - ./data/mock_data.sql:/mock_data.sql
+    entrypoint: >
+      sh -c "
+        echo '🕒 Attente que la DB soit prête...';
+        sleep 10;
+        echo '⏳ Attente du backend (création des tables)...';
+        sleep 20;
+        echo '🚀 Insertion des données';
+        mysql -hmysqldb -u$${{secrets.SPRING_DATASOURCE_USERNAME}} -p$${{secrets.SPRING_DATASOURCE_PASSWORD}} $${{secrets.MYSQL_DATABASE}} < /mock_data.sql;
+        echo '✅ Données injectées';
+      "
+    depends_on:
+      backend:
+        condition: service_started
 
   frontend:
     image: yelp-ea-front
-    depends_on:
-      - backend
+    build:
+      context: ./yelp-ea
     ports:
       - "4200:80"
+    depends_on:
+      - backend
 
 volumes:
   biblio-mysql-data:

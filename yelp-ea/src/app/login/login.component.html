@@ -1,1 +1,20 @@
-<p>login works!</p>
+
+<div class="ElementPageAlignement">
+<div class="wrapper">
+    <div class="title">
+      Connexion Yelp-ea
+    </div>
+    <form (ngSubmit)="login()">
+      <div class="field">
+        <input id="login" type="text" [(ngModel)]="loginData.login" name="login" placeholder="Identifiant :" required>
+      </div>
+      <div class="field">
+        <input id="password" type="password" [(ngModel)]="loginData.password" name="password" placeholder="Mot de passe :" required>
+      </div>
+      <div class="field">
+        <button type="submit">Se connecter</button>
+      </div>
+    </form>
+  </div>
+  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+</div>

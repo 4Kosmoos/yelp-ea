@@ -1,0 +1,117 @@
+::selection {
+  background: #1a4146;  /* Bleu foncé pour la sélection */
+  color: #fff;
+}
+
+.ElementPageAlignement {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  margin: 0px;
+  background-image: url('../image/img-resto.png');  /* Remplacez par le chemin de votre image */
+  background-size: cover;  /* Couvre tout l'écran */
+  background-position: center;  /* Centrer l'image */
+  background-repeat: no-repeat;  /* Ne pas répéter l'image */
+  }
+
+.wrapper {
+  width: 380px;
+  background: #fff;  /* Fond blanc pour le formulaire */
+  border-radius: 15px;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 100px;
+  color: #fff;
+  user-select: none;
+  border-radius: 15px 15px 0 0;
+  background: linear-gradient(-135deg, #304c4c, #297272);  /* Dégradé bleu pour le titre */
+}
+
+.wrapper form {
+  padding: 10px 30px 50px 30px;
+}
+
+.wrapper form .field {
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+}
+
+.wrapper form .field input, button {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  font-size: 17px;
+  padding-left: 20px;
+  border: 1px solid #297272;  /* Bordure bleu */
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  background: #fff;  /* Fond blanc pour les champs */
+}
+
+.wrapper form .field button:focus,
+form .field button:valid {
+  border-color: #1a4146;  /* Bordure plus foncée lorsqu'en focus */
+}
+
+.wrapper form .field label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 17px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+form .field button:focus ~ label,
+form .field button:valid ~ label {
+  top: 0%;
+  font-size: 16px;
+  color: #1a4146;  /* Label bleu foncé lorsqu'en focus */
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+form .field button[type="submit"] {
+  color: #fff;
+  border: none;
+  padding-left: 0;
+  margin-top: -10px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(-135deg, #1a4146, #297272);  /* Dégradé bleu pour le bouton */
+  transition: all 0.3s ease;
+}
+
+form .field button[type="submit"]:active {
+  transform: scale(0.95);
+}
+
+form .signup-link {
+  color: #262626;
+  margin-top: 20px;
+  text-align: center;
+}
+
+form .pass-link a,
+form .signup-link a {
+  color: #297272;  /* Lien bleu */
+  text-decoration: none;
+}
+
+form .pass-link a:hover,
+form .signup-link a:hover {
+  text-decoration: underline;
+}

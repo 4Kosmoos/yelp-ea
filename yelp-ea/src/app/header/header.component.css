@@ -1,33 +1,82 @@
 .app-header {
-    padding: 10px 20px;
-    background-color: #f8f9fa;
-    box-shadow: 0 4px 2px -2px gray;
+  background-color: #1a4146; /* Fond légèrement plus foncé que celui du site */
+  padding: 10px 0;
+}
+
+.navbar {
+  padding: 0 20px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-items {
+  gap: 1rem;
+  display: flex;
+}
+
+button {
+  background-color: #297272;  /* Bleu-vert */
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #1a4146; /* Plus foncé au survol */
+  transform: scale(1.05); /* Légère agrandissement au survol */
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 139, 131, 0.5);  /* Ombre pour l'accessibilité */
+}
+
+/* Bouton de déconnexion */
+button.btn-danger {
+  background-color: #b66d2f;  /* Couleur du bouton de déconnexion */
+}
+
+button.btn-danger:hover {
+  background-color: #d3a446;  /* Plus clair au survol */
+}
+
+/* Styles pour les boutons spécifiques aux rôles */
+button.btn-custom {
+  background-color: #297272;
+  color: #fff;
+}
+
+button.btn-custom:hover {
+  background-color: #1a4146;
+}
+
+.logout-btn {
+  margin-left: auto; /* Pousse le bouton de déconnexion à droite */
+}
+
+/* Media query pour la responsivité */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Organise les éléments en colonne sur petits écrans */
+    align-items: flex-start;
   }
-  
-  .navbar-brand {
-    font-size: 1.5em;
-    font-weight: bold;
-  }
-  
+
   .nav-items {
-    display: flex;
-    gap: 15px;
+    margin-right: 0;
+    margin-bottom: 10px; /* Écart entre les boutons sur mobile */
   }
-  
-  .nav-items button {
-    font-size: 1em;
-    padding: 8px 15px;
-    border-radius: 5px;
+
+  .logout-btn {
+    margin-left: 0; /* Annule l'alignement à droite sur mobile */
   }
-  
-  .nav-items button:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+}

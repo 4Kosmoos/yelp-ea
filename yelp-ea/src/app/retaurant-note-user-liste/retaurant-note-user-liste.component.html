@@ -1,0 +1,73 @@
+<div class="table-container">
+  <h2>Liste des restaurants</h2>
+
+  <!-- Affichage du chargement -->
+  <div *ngIf="isLoading" class="is-loading">Chargement des restaurants...</div>
+
+  <!-- Affichage des erreurs -->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- Liste des restaurants -->
+  <table *ngIf="!isLoading && restaurants.length > 0" class="restaurant-table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Adresse</th>
+      <th>Description</th>
+      <th>Téléphone</th>
+      <th>Catégorie</th>
+      <th>Note Moyenne</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let restaurant of restaurants">
+      <td>{{ restaurant.name }}</td>
+      <td>{{ restaurant.address }}</td>
+      <td>{{ restaurant.description }}</td>
+      <td>{{ restaurant.phone }}</td>
+      <td>
+          <span *ngFor="let category of restaurant.categories; let last = last">
+            {{ category }}{{ last ? '' : ', ' }}
+          </span>
+      </td>
+      <td>{{ restaurant.noteFromCustomer }} ★</td>
+      <td>
+        <button class="delete-btn" (click)="openRatingModal(restaurant)">
+          Modifier la note
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && restaurants.length === 0" class="no-restaurants">
+    Aucun restaurant trouvé.
+  </div>
+
+  <!-- Modal de notation -->
+  <div class="modal-overlay" *ngIf="isModalOpen" [ngClass]="{ 'show': isModalOpen }">
+    <div class="modal">
+      <div class="modal-header">
+        <h5>Noter {{ selectedRestaurant?.name }}</h5>
+        <button class="close-btn" (click)="closeModal()">✖</button>
+      </div>
+      <div class="modal-body">
+        <p>Attribuez une note :</p>
+        <div class="stars">
+        <span *ngFor="let star of [1,2,3,4,5]"
+              class="star"
+              [ngClass]="{ 'selected': star <= selectedRating }"
+              (click)="selectRating(star)">
+          ★
+        </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="closeModal()">Annuler</button>
+        <button class="validate-btn" (click)="submitRating()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+</div>

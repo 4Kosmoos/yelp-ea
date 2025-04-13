@@ -1,142 +1,124 @@
-/* Styles généraux pour la liste des restaurants */
-.restaurant-list h3 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 2rem;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
+/* Conteneur principal */
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 75vh;
+  width: 100%;
+  padding: 20px;
 }
 
-/* Style général pour les cartes de restaurant */
-.table-responsive {
-    margin-top: 2rem;
+/* Style global du tableau */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.table {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    border: 0;
-    overflow: hidden;
+/* Espacement des cellules du tableau */
+.dashboard-table th, .dashboard-table td {
+  padding: 15px;
+  text-align: left;
+  font-size: 16px;
+  color: #1a4146;
 }
 
-.table th,
-.table td {
-    padding: 15px;
-    text-align: left;
-    vertical-align: middle;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
+/* En-têtes */
+.dashboard-table th {
+  background-color: #297272;
+  color: #fff;
+  font-weight: 600;
 }
 
-.table thead {
-    background: linear-gradient(90deg, #00bcd4, #009688);
-    color: #fff;
-    text-transform: uppercase;
-    font-weight: 600;
+/* Lignes paires avec fond gris */
+.dashboard-table tr:nth-child(even) {
+  background-color: #f7f7f7;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f7f7f7;
+/* Survol de ligne */
+.dashboard-table tr:hover {
+  background-color: #e8e0c8;
 }
 
-.table-striped tbody tr:nth-of-type(even) {
-    background-color: #ffffff;
+/* Bouton de suppression */
+.delete-btn {
+  background: #d3a446;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
 }
 
-.table-striped tbody tr:hover {
-    background-color: #f1f1f1;
-    transition: background-color 0.3s;
+.delete-btn:hover {
+  background: #b66d2f;
 }
 
-.table td {
-    font-size: 1rem;
-    color: #333;
+/* Espacement et centrage des boutons d'action */
+.bottom-table-btn {
+  display: flex;
+  justify-content: space-between; /* Espacer les boutons */
+  align-items: center;
 }
 
-.table th {
-    font-size: 1.1rem;
+.bottom-table-btn button {
+  width: 45%; /* Largeur des boutons */
 }
 
-/* Boutons d'action modernisés */
-.btn {
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    text-transform: capitalize;
-    display: flex;
-    align-items: center;
+/* Ajout d'un style pour le bouton "Modifier" */
+.update-btn {
+  background: #297272;
 }
 
-.btn-warning {
-    background-color: #ff9800;
-    color: white;
-    border: none;
+.update-btn:hover {
+  background: #1a4146;
 }
 
-.btn-danger {
-    background-color: #f44336;
-    color: white;
-    border: none;
+/* Message d'erreur */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Chargement des utilisateurs */
+.is-loading {
+  font-size: 18px;
+  color: #297272;
+  text-align: center;
+  font-weight: 500;
 }
 
-.btn-warning:hover {
-    background-color: #fb8c00;
+/* Aucun utilisateur trouvé */
+.no-users {
+  font-size: 18px;
+  color: #999;
+  text-align: center;
 }
 
-.btn-danger:hover {
-    background-color: #d32f2f;
+th {
+  width: 20%;
 }
 
-/* Ajouter des icônes modernes et bien espacées */
-.bi {
-    margin-right: 8px;
-    font-size: 1.2rem;
+.header-table-btn {
+  width: 100px;
 }
 
-/* Effet de survol des cartes */
-.table tbody tr:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+h2 {
+  margin-bottom: 2em;
 }
 
-/* Table Responsive */
-.table-responsive {
-    margin: 2rem 0;
-    overflow-x: auto;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Ajout d'un fond dégradé subtil à la page */
-body {
-    background: linear-gradient(135deg, #f0f2f5, #e6f7ff);
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.restaurant-list {
-    margin-top: 3rem;
-}
-
-/* Pour les petits écrans, ajustement de la table */
-@media (max-width: 767px) {
-    .table-responsive {
-        margin-top: 1rem;
-    }
-
-    .table td, .table th {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
+/* Alignement et marges des boutons sous le tableau */
+.bottom-table-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
