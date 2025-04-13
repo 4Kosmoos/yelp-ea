@@ -100,11 +100,12 @@ jobs:
           password: ${{secrets.DOCKER_EMELINE_PASSWORD}}
   
       # Construire l'image Docker
-      - name: Pull images
+      - name: Build Docker images
         run: |
-          docker pull ingivre/yelp_ea:yelp-ea-api
-          docker pull ingivre/yelp_ea:yelp-ea-front
-          docker pull ingivre/yelp_ea:mysql-8.0
+          docker build -t ingivre/yelp_ea:yelp-ea-api ./yelp-ea-api
+          docker build -t ingivre/yelp_ea:yelp-ea-front ./yelp-ea
+          docker build -t ingivre/yelp_ea:mysql-8.0 ./mysql
+        
       # Pousser l'image Docker vers le registre
       - name: Push Docker images
         run: |
