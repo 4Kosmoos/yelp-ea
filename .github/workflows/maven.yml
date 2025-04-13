@@ -1,6 +1,5 @@
 name: CI/CD Yelp-EA
 
-
 on:
   push:
     branches: [main, back]
@@ -57,11 +56,30 @@ jobs:
             sleep 5
           done
   
-      - name: Run Selenium login + dashboard test
+      - name: Install dependencies for headless Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libatk-bridge2.0-0 libx11-xcb1
+          sudo apt-get install -y google-chrome-stable
+  
+      # Installer ChromeDriver via WebDriverManager
+      - name: Install ChromeDriver with WebDriverManager
+        run: |
+          python -m pip install webdriver-manager
+          python -c "from webdriver_manager.chrome import ChromeDriverManager; print(ChromeDriverManager().install())"
+      
+      # Vérifier les versions de Chrome et ChromeDriver
+      - name: Check Chrome and ChromeDriver versions
+        run: |
+          google-chrome --version
+          chromedriver --version
+  
+      # Exécuter les tests Selenium
+      - name: Run Selenium tests
         run: |
           cd selenium
           python test_dashboard_restaurateur.py
-  
+        
       - name: Teardown
         run: docker-compose down
 
@@ -80,7 +98,6 @@ jobs:
         with:
           username: ingivre
           password: dckr_pat_X5EtjyGr3pnJXpq-1cJB_0mYYWM
-  
   
       # Construire l'image Docker
       - name: Pull images
