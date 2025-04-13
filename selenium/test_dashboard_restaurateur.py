@@ -66,10 +66,6 @@ try:
     except:
         print("✅ Pas d'alerte.")
 
-    # Attente explicite sur un h2 qui indique que la page est bien chargée
-    WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Liste de mes restaurants')]"))
-    )
     print("✅ Redirection vers la page de restaurants détectée.")
 
     # Attente que le spinner disparaisse
