@@ -43,7 +43,7 @@ services:
         echo '⏳ Attente du backend (création des tables)...';
         sleep 20;
         echo '🚀 Insertion des données';
-        mysql -hmysqldb -uapp_user -papp_password yelp < /mock_data.sql;
+        mysql -hmysqldb -u$${{secrets.SPRING_DATASOURCE_USERNAME}} -p$${{secrets.SPRING_DATASOURCE_PASSWORD}} $${{secrets.MYSQL_DATABASE}} < /mock_data.sql;
         echo '✅ Données injectées';
       "
     depends_on:
