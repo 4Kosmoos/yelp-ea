@@ -61,10 +61,13 @@ try:
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
     print("📨 Formulaire soumis.")
 
+    import time
+    time.sleep(5)  # Pause de 5 secondes avant de chercher l'élément
+
     # Attente de redirection vers la page restaurant
     print("⏳ Attente de redirection vers la page des restaurants...")
     WebDriverWait(driver, 15).until(
-        EC.presence_of_element_located((By.TAG_NAME, "h2"))
+    EC.presence_of_element_located((By.TAG_NAME, "h2"))
     )
     assert "Liste de mes restaurants" in driver.page_source
     print("✅ Redirection vers la page de restaurants détectée.")
